@@ -1,0 +1,19 @@
+{
+	"extends": "@sindresorhus/tsconfig",
+	"compilerOptions": {
+		"jsx": "react",
+		"jsxImportSource": "react",
+		"outDir": "dist",
+		"sourceMap": true,
+		"module": "ESNext",
+		"moduleResolution": "nodenext",
+		"esModuleInterop": true,
+		"target": "ES2022",
+		"lib": ["ES2022"],
+		"types": ["node", "react"],
+		"skipLibCheck": true
+	},
+	"include":  [
+		"source"
+	]
+}
