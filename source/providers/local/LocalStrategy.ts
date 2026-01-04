@@ -16,6 +16,9 @@ export class LocalStrategy implements KanbanStrategy {
 				{
 					id: '1',
 					title: 'Write Ink CLI 1',
+					feature: '',
+					description: '',
+
 					boardId: 'board-1',
 					columnId: 'todo',
 					priority: 'low',
@@ -23,27 +26,37 @@ export class LocalStrategy implements KanbanStrategy {
 				{
 					id: '2',
 					title: 'Test Providers 2',
+
+					description:
+						'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut',
 					boardId: 'board-1',
 					columnId: 'todo',
-					priority: 'high',
-					feature: 'Testing',
+					priority: 'medium',
+					feature: '',
 					points: 5,
 				},
 				{
 					id: '3',
 					title: 'Test Providers 3',
+
+					description:
+						'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut',
 					boardId: 'board-1',
 					columnId: 'todo',
-					priority: 'high',
+					priority: 'medium',
 					feature: 'Testing',
 					points: 5,
 				},
 				{
 					id: '4',
-					title: 'Write Ink CLI 4',
+					title: 'Test Providers 4',
+					description:
+						'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut',
 					boardId: 'board-1',
 					columnId: 'todo',
-					priority: 'low',
+					priority: 'high',
+					feature: 'Testing',
+					points: 5,
 				},
 				{
 					id: '5',

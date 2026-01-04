@@ -1,8 +1,8 @@
-import React, {ReactNode, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Column as IColumn, Card as ICard} from '../core/models.js';
 import Column from './Column.js';
-import {Box, Text, useStdout} from 'ink';
-import {useDebug} from '../context/DebugContext.js';
+import {useStdout} from 'ink';
+import Box from './Box.js';
 
 type Props = {
 	columns: IColumn[];
@@ -17,7 +17,6 @@ const Columns = ({
 	focusedColumnIndex,
 	columnOffsets,
 }: Props) => {
-	const debug = useDebug();
 	const {stdout} = useStdout();
 
 	// Keep rows in state so component re-renders
@@ -37,10 +36,6 @@ const Columns = ({
 			stdout.off('resize', handleResize);
 		};
 	}, [stdout]);
-
-	useEffect(() => {
-		debug.addStatement(`Column Container rows: ${rows}`);
-	}, [rows]);
 
 	return (
 		<Box>

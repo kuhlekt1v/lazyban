@@ -9,14 +9,13 @@ type ColumnProps = {
 	title: string;
 	cards: ICard[];
 	isFocused: boolean;
-	offset: number;
 };
 
-const CARD_HEIGHT = 8;
+const CARD_HEIGHT = 7;
 const HEADER_HEIGHT = 1;
 const FOOTER_HEIGHT = 2;
 
-const Column = ({title, cards, isFocused, offset}: ColumnProps) => {
+const Column = ({title, cards, isFocused}: ColumnProps) => {
 	const {stdout} = useStdout();
 	const [bodyHeight, setBodyHeight] = useState(
 		stdout.rows - HEADER_HEIGHT - FOOTER_HEIGHT,
@@ -54,7 +53,7 @@ const Column = ({title, cards, isFocused, offset}: ColumnProps) => {
 			borderStyle="round"
 			borderColor={color}
 			flexDirection="column"
-			justifyContent="space-between"
+			justifyContent="flex-start"
 			width={100}
 		>
 			{/* Header */}
