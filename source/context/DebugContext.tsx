@@ -1,9 +1,9 @@
-import React, {createContext, ReactNode, useContext, useState} from 'react';
+import React, {createContext, useContext, useState} from 'react';
 
 export type DebugContextValue = {
 	debug: boolean;
 	debugStatements: string[];
-	addStatement: (item: string) => void;
+	addStatement: (key: string, item: string) => void;
 	clearStatements: () => void;
 };
 
@@ -17,8 +17,13 @@ export function DebugProvider({
 	children: React.ReactNode;
 }) {
 	const [debugStatements, setDebugStatements] = useState<string[]>([]);
-	const addStatement = (item: string) =>
-		setDebugStatements(prev => [...prev, item]);
+
+	const addStatement = (key: string, value: string) =>
+		setDebugStatements(prev => {
+			const filtered = prev.filter(s => !s.startsWith(key + ':'));
+			return [...filtered, `${key}: ${value}`];
+		});
+
 	const clearStatements = () => setDebugStatements([]);
 
 	return (
