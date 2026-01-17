@@ -1,3 +1,6 @@
+import {FOCUS_ACTION} from './context/FocusContext.js';
+import {Command} from './core/models.js';
+
 export const COLOR = {
 	PRIMARY: '#79A0C9',
 	SECONDARY: '#EAEBF2',
@@ -8,3 +11,41 @@ export const COLOR = {
 	ORANGE: '#F6B26B',
 	RED: '#E06666',
 };
+
+export const LAYOUT = {
+	CARD_HEIGHT: 7,
+	HEADER_HEIGHT: 1,
+	FOOTER_HEIGHT: 2,
+	TOTAL_COLUMN: 4,
+};
+
+export const COMMANDS: Command[] = [
+	{
+		title: 'Quit',
+		input: ['q'],
+		action: FOCUS_ACTION.QUIT,
+		description: 'Clear terminal and quit application.',
+		display: true,
+	},
+	{
+		title: 'Keybindings',
+		input: ['?'],
+		action: FOCUS_ACTION.KEYBINDINGS,
+		description: '',
+		display: true,
+	},
+	{
+		title: 'Prev. Column',
+		input: ['y', 'leftArrow'],
+		action: FOCUS_ACTION.PREV_COL,
+		description: 'Move focus to previous column.',
+		display: false,
+	},
+	{
+		title: 'Next Column',
+		input: ['l', 'rightArrow'],
+		action: FOCUS_ACTION.NEXT_COL,
+		description: 'Move focus to next column.',
+		display: false,
+	},
+];

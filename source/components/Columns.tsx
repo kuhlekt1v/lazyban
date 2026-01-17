@@ -3,23 +3,17 @@ import {Column as IColumn, Card as ICard} from '../core/models.js';
 import Column from './Column.js';
 import {useStdout} from 'ink';
 import Box from './Box.js';
+import {useFocus} from '../context/FocusContext.js';
 
 type Props = {
 	columns: IColumn[];
 	cards: ICard[];
-	focusedColumnIndex: number;
 	columnOffsets: number[];
 };
 
-const Columns = ({
-	columns,
-	cards,
-	focusedColumnIndex,
-	columnOffsets,
-}: Props) => {
+const Columns = ({columns, cards, columnOffsets}: Props) => {
 	const {stdout} = useStdout();
-
-	// Keep rows in state so component re-renders
+	const {focusState} = useFocus();
 	const [rows, setRows] = useState(stdout.rows);
 
 	useEffect(() => {
@@ -44,7 +38,7 @@ const Columns = ({
 					key={column.id}
 					title={column.name}
 					cards={cards}
-					isFocused={idx === focusedColumnIndex}
+					isFocused={idx === focusState.activeColumnIndex}
 					offset={columnOffsets[idx]}
 				/>
 			))}

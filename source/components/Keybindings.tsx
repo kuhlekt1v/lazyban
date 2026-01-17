@@ -1,8 +1,10 @@
 import React from 'react';
 import {Box, Text, useInput} from 'ink';
-import {COLOR} from '../constants.js';
-import {Command, useCommands} from '../context/CommandsContext.js';
+import {COLOR, COMMANDS} from '../constants.js';
 import {Column} from '../core/models.js';
+import {FOCUS_ACTION, useFocus} from '../context/FocusContext.js';
+import {useDebug} from '../context/DebugContext.js';
+import {useAppEnv} from '../context/AppEnvContext.js';
 
 type Props = {
 	focusedColumnIndex: number;
@@ -10,33 +12,55 @@ type Props = {
 	columns: Column[];
 };
 
-const Keybindings = ({setFocusedColumnIndex, columns}: Props) => {
-	const {commands, dispatch} = useCommands();
+const Keybindings = ({columns}: Props) => {
+	const {nextColumn} = useFocus();
+	const {addStatement} = useDebug();
+	const {clear, unmount} = useAppEnv();
 
-	const displayedCommands = commands.filter(command => command.display);
+	const displayedCommands = COMMANDS.filter(command => command.display);
 
 	useInput((input, key) => {
 		let trigger: string | undefined = input;
 		if (key.leftArrow) trigger = 'leftArrow';
 		else if (key.rightArrow) trigger = 'rightArrow';
 
-		const cmd = commands.find(c => c.input.includes(trigger));
+		const cmd = COMMANDS.find(c => c.input.includes(trigger));
+
 		if (cmd) {
-			if (cmd.action.type === 'PREV_COLUMN') {
-				setFocusedColumnIndex(
-					prev => (prev - 1 + columns.length) % columns.length,
-				);
-			} else if (cmd.action.type === 'NEXT_COLUMN') {
-				setFocusedColumnIndex(
-					prev => (prev + 1 + columns.length) % columns.length,
-				);
-			} else {
-				dispatch(cmd.action);
+			switch (cmd.action) {
+				case FOCUS_ACTION.QUIT:
+					clear();
+					unmount();
+					break;
+				case FOCUS_ACTION.NEXT_COL:
+					nextColumn();
+					break;
+
+				case FOCUS_ACTION.PREV_COL:
+					break;
+
+				case 'PREV_CARD':
+					// dispatch({
+					// 	type: 'PREV_CARD',
+					// 	cardCount: visibleCards.length,
+					// });
+					break;
+
+				case 'NEXT_CARD':
+					// dispatch({
+					// 	type: 'NEXT_CARD',
+					// 	cardCount: visibleCards.length,
+					// });
+					break;
+
+				default:
+					break;
 			}
 		}
 	});
 
 	return (
+		// @ts-ignore
 		<Box marginLeft={1}>
 			{displayedCommands.map((command: Command, index: number) => {
 				let title = `${

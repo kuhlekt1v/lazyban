@@ -27,6 +27,7 @@ export function DebugProvider({
 	const clearStatements = () => setDebugStatements([]);
 
 	return (
+		// @ts-ignore
 		<DebugContext.Provider
 			value={{debug, debugStatements, addStatement, clearStatements}}
 		>

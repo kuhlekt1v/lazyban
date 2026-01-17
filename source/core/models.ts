@@ -1,17 +1,9 @@
-/**models
+/**
  * Shared ID type across the app
  * Allows providers to use strings, UUIDs, numeric IDs, etc.
  */
 export type ID = string;
 
-export type AppEnv = {
-	clear: () => void;
-	unmount: () => void;
-};
-
-/**
- * Kanban Card (Issue / Task / Work Item)
- */
 export interface Card {
 	id: ID;
 	title: string;
@@ -31,9 +23,6 @@ export interface Card {
 	metadata?: Record<string, unknown>;
 }
 
-/**
- * Column / Lane
- */
 export interface Column {
 	id: ID;
 	name: string;
@@ -44,9 +33,6 @@ export interface Column {
 	metadata?: Record<string, unknown>;
 }
 
-/**
- * Board
- */
 export interface Board {
 	id: ID;
 	name: string;
@@ -55,4 +41,12 @@ export interface Board {
 	cards: Card[];
 
 	metadata?: Record<string, unknown>;
+}
+
+export interface Command {
+	title: string;
+	input: string[];
+	action: string;
+	description: string;
+	display: boolean;
 }

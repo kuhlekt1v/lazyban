@@ -7,11 +7,12 @@ import Box from './Box.js';
 type CardProps = {
 	card: ICard;
 	height: number;
+	isActive: boolean;
 };
 
 const PADDING_X = 1;
 
-const Card = ({card, height}: CardProps) => {
+const Card = ({card, height, isActive}: CardProps) => {
 	const priorityMap: Record<string, {color: string; value: string}> = {
 		low: {color: COLOR.YELLOW, value: '[!  ]  '},
 		medium: {color: COLOR.ORANGE, value: '[!! ]  '},
@@ -26,7 +27,7 @@ const Card = ({card, height}: CardProps) => {
 			flexDirection="column"
 			justifyContent="space-between"
 			borderStyle="single"
-			borderColor={COLOR.SECONDARY}
+			borderColor={isActive ? COLOR.PRIMARY : COLOR.SECONDARY}
 			height={height}
 		>
 			<Text>
