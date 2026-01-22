@@ -27,9 +27,6 @@ export interface Column {
 	id: ID;
 	name: string;
 	order: number;
-
-	cardIds: ID[];
-
 	metadata?: Record<string, unknown>;
 }
 

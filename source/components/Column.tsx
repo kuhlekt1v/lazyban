@@ -9,34 +9,32 @@ import {useFocus} from '../context/FocusContext.js';
 type ColumnProps = {
 	title: string;
 	cards: ICard[];
+	columnIndex: number;
 	isFocused: boolean;
 };
 
-const Column = ({title, cards, isFocused}: ColumnProps) => {
+const Column = ({title, cards, columnIndex, isFocused}: ColumnProps) => {
 	const {stdout} = useStdout();
-	const {focusState} = useFocus();
+	const {focusState, cardsPerColumn} = useFocus();
 	const {HEADER_HEIGHT, FOOTER_HEIGHT, CARD_HEIGHT} = LAYOUT;
 
 	const [bodyHeight, setBodyHeight] = useState(
 		stdout.rows - HEADER_HEIGHT - FOOTER_HEIGHT,
 	);
 
+	const activeCardIndex = focusState.active.cardIndex;
+	const visibleCardsPerColumn = Math.floor(bodyHeight / CARD_HEIGHT);
+	const startIndex = isFocused
+		? Math.floor(activeCardIndex / visibleCardsPerColumn) *
+		  visibleCardsPerColumn
+		: 0;
+
+	const visibleCards = cards.slice(
+		startIndex,
+		startIndex + visibleCardsPerColumn,
+	);
+
 	const color = isFocused ? COLOR.PRIMARY : COLOR.SECONDARY;
-	const columnCards = cards.filter(
-		card => card.columnId === title.toLowerCase(),
-	);
-	const cardsPerColumn = Math.floor(bodyHeight / CARD_HEIGHT);
-	const visibleCards = columnCards.slice(0, cardsPerColumn);
-
-	const [firstVisibleCard, setFirstVisibleCard] = useState(0);
-	const [lastVisibleCard, setLastVisibleCard] = useState(
-		firstVisibleCard + cardsPerColumn,
-	);
-
-	const activeCardIndex =
-		visibleCards.length === 0
-			? -1
-			: Math.min(focusState.activeCardIndex, visibleCards.length - 1);
 
 	/* Dynamically resize column body if terminal
 	 * manually resized (e.g. user click & drag).
@@ -53,9 +51,20 @@ const Column = ({title, cards, isFocused}: ColumnProps) => {
 		};
 	}, [stdout]);
 
+	const totalCards = cardsPerColumn[columnIndex] ?? 0;
+
+	const firstVisible = isFocused ? focusState.active.cardIndex + 1 : 1;
+
+	const lastVisible = Math.min(
+		startIndex + visibleCardsPerColumn,
+		cards.length,
+	);
+
 	const footerText =
-		columnCards.length > 0
-			? `${firstVisibleCard + 1}-${lastVisibleCard} of ${columnCards.length}`
+		cards.length > 0
+			? isFocused
+				? `${firstVisible}-${lastVisible} of ${totalCards}`
+				: `1-${Math.min(visibleCardsPerColumn, cards.length)} of ${totalCards}`
 			: '';
 
 	return (
@@ -76,7 +85,11 @@ const Column = ({title, cards, isFocused}: ColumnProps) => {
 					key={card.id}
 					card={card}
 					height={CARD_HEIGHT}
-					isActive={index === activeCardIndex}
+					isActive={
+						isFocused &&
+						index + startIndex === focusState.active.cardIndex &&
+						columnIndex === focusState.active.columnIndex
+					}
 				/>
 			))}
 			{/* Footer */}

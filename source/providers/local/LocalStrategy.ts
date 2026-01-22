@@ -7,10 +7,10 @@ export class LocalStrategy implements KanbanStrategy {
 			id: 'board-1',
 			name: 'Sample Board',
 			columns: [
-				{id: 'todo', name: 'TODO', cardIds: ['1', '2'], order: 0},
-				{id: 'doing', name: 'DOING', cardIds: [], order: 1},
-				{id: 'blocked', name: 'BLOCKED', cardIds: [], order: 2},
-				{id: 'done', name: 'DONE', cardIds: [], order: 3},
+				{id: 'todo', name: 'TODO', order: 0},
+				{id: 'doing', name: 'DOING', order: 1},
+				{id: 'blocked', name: 'BLOCKED', order: 2},
+				{id: 'done', name: 'DONE', order: 3},
 			],
 			cards: [
 				{
@@ -81,6 +81,15 @@ export class LocalStrategy implements KanbanStrategy {
 					title: 'Test Providers 7',
 					boardId: 'board-1',
 					columnId: 'todo',
+					priority: 'high',
+					feature: 'Testing',
+					points: 5,
+				},
+				{
+					id: '8',
+					title: 'Test Providers 8',
+					boardId: 'board-1',
+					columnId: 'doing',
 					priority: 'high',
 					feature: 'Testing',
 					points: 5,

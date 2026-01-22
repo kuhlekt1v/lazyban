@@ -1,19 +1,17 @@
 import React from 'react';
 import {Box, Text, useInput} from 'ink';
 import {COLOR, COMMANDS} from '../constants.js';
-import {Column} from '../core/models.js';
+import {Column, Command} from '../core/models.js';
 import {FOCUS_ACTION, useFocus} from '../context/FocusContext.js';
 import {useDebug} from '../context/DebugContext.js';
 import {useAppEnv} from '../context/AppEnvContext.js';
 
 type Props = {
-	focusedColumnIndex: number;
-	setFocusedColumnIndex: (index: number | ((prev: number) => number)) => void;
 	columns: Column[];
 };
 
 const Keybindings = ({columns}: Props) => {
-	const {nextColumn} = useFocus();
+	const {nextColumn, prevColumn, nextCard, prevCard} = useFocus();
 	const {addStatement} = useDebug();
 	const {clear, unmount} = useAppEnv();
 
@@ -21,10 +19,14 @@ const Keybindings = ({columns}: Props) => {
 
 	useInput((input, key) => {
 		let trigger: string | undefined = input;
+
 		if (key.leftArrow) trigger = 'leftArrow';
+		else if (key.downArrow) trigger = 'downArrow';
 		else if (key.rightArrow) trigger = 'rightArrow';
+		else if (key.upArrow) trigger = 'upArrow';
 
 		const cmd = COMMANDS.find(c => c.input.includes(trigger));
+		addStatement('Pressed', trigger);
 
 		if (cmd) {
 			switch (cmd.action) {
@@ -37,20 +39,14 @@ const Keybindings = ({columns}: Props) => {
 					break;
 
 				case FOCUS_ACTION.PREV_COL:
+					prevColumn();
 					break;
 
-				case 'PREV_CARD':
-					// dispatch({
-					// 	type: 'PREV_CARD',
-					// 	cardCount: visibleCards.length,
-					// });
+				case FOCUS_ACTION.NEXT_CARD:
+					nextCard();
 					break;
-
-				case 'NEXT_CARD':
-					// dispatch({
-					// 	type: 'NEXT_CARD',
-					// 	cardCount: visibleCards.length,
-					// });
+				case FOCUS_ACTION.PREV_CARD:
+					prevCard();
 					break;
 
 				default:
@@ -63,9 +59,24 @@ const Keybindings = ({columns}: Props) => {
 		// @ts-ignore
 		<Box marginLeft={1}>
 			{displayedCommands.map((command: Command, index: number) => {
-				let title = `${
-					Array.isArray(command.input) ? command.input.join(',') : command.input
-				}: ${command.title}`;
+				const inputToIcon = (input: string) => {
+					switch (input) {
+						case 'leftArrow':
+							return '←';
+						case 'rightArrow':
+							return '→';
+						case 'upArrow':
+							return '↑';
+						case 'downArrow':
+							return '↓';
+						default:
+							return input;
+					}
+				};
+				let inputDisplay = Array.isArray(command.input)
+					? command.input.map(inputToIcon).join(',')
+					: inputToIcon(command.input);
+				let title = `${inputDisplay}: ${command.title}`;
 				if (index + 1 !== displayedCommands.length) title = `${title} | `;
 				return (
 					<Text key={index} color={COLOR.ALT_HIGHLIGHT}>

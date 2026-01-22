@@ -36,16 +36,30 @@ export const COMMANDS: Command[] = [
 	},
 	{
 		title: 'Prev. Column',
-		input: ['y', 'leftArrow'],
+		input: ['h', 'leftArrow'],
 		action: FOCUS_ACTION.PREV_COL,
 		description: 'Move focus to previous column.',
-		display: false,
+		display: true,
 	},
 	{
 		title: 'Next Column',
 		input: ['l', 'rightArrow'],
 		action: FOCUS_ACTION.NEXT_COL,
 		description: 'Move focus to next column.',
-		display: false,
+		display: true,
+	},
+	{
+		title: 'Prev. Card',
+		input: ['k', 'upArrow'],
+		action: FOCUS_ACTION.PREV_CARD,
+		description: 'Move focus up to previous card in active column.',
+		display: true,
+	},
+	{
+		title: 'Next Card',
+		input: ['j', 'downArrow'],
+		action: FOCUS_ACTION.NEXT_CARD,
+		description: 'Move focus up to next card in active column.',
+		display: true,
 	},
 ];
