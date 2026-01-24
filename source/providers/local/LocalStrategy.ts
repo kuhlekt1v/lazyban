@@ -20,7 +20,7 @@ export class LocalStrategy implements KanbanStrategy {
 					description:
 						'Layout for expanded card view with description, due date, comments, and close action',
 					boardId: 'board-1',
-					columnId: 'doing',
+					columnId: 'done',
 					priority: 'high',
 					feature: 'Card Details',
 					points: 3,
@@ -54,7 +54,7 @@ export class LocalStrategy implements KanbanStrategy {
 					title: 'Design help menu UI',
 					description: 'Layout all keybindings in organized, scannable format',
 					boardId: 'board-1',
-					columnId: 'todo',
+					columnId: 'done',
 					priority: 'medium',
 					feature: 'Keybind Help Menu',
 					points: 2,
