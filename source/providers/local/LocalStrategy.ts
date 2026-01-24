@@ -18,10 +18,8 @@ export class LocalStrategy implements KanbanStrategy {
 					title: 'Write Ink CLI 1',
 					feature: '',
 					description: '',
-
 					boardId: 'board-1',
 					columnId: 'todo',
-					priority: 'low',
 				},
 				{
 					id: '2',
@@ -96,25 +94,6 @@ export class LocalStrategy implements KanbanStrategy {
 				},
 			],
 		},
-		// {
-		// 	id: 'board-2',
-		// 	name: 'Sample Board',
-		// 	columns: [
-		// 		{id: 'todo', name: 'TODO', cardIds: ['1', '2'], order: 0},
-		// 		{id: 'doing', name: 'DOING', cardIds: [], order: 1},
-		// 		{id: 'blocked', name: 'BLOCKED', cardIds: [], order: 2},
-		// 		{id: 'done', name: 'DONE', cardIds: [], order: 3},
-		// 	],
-		// 	cards: [
-		// 		{id: '1', title: 'Write Ink CLI', boardId: 'board-1', columnId: 'todo'},
-		// 		{
-		// 			id: '2',
-		// 			title: 'Test Providers',
-		// 			boardId: 'board-1',
-		// 			columnId: 'todo',
-		// 		},
-		// 	],
-		// },
 	];
 
 	async getBoards(): Promise<Board[]> {

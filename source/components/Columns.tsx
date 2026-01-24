@@ -30,7 +30,7 @@ const Columns = ({columns, cards, columnOffsets}: Props) => {
 	}, [cardsPerColumn, setCardsPerColumn]);
 
 	return (
-		<Box>
+		<Box height={100}>
 			{columns.map((column, index) => {
 				const columnCards = cards.filter(
 					card => card.columnId === column.name.toLowerCase(),

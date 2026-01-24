@@ -72,7 +72,7 @@ const Column = ({title, cards, columnIndex, isFocused}: ColumnProps) => {
 			borderStyle="round"
 			borderColor={color}
 			flexDirection="column"
-			justifyContent="flex-start"
+			justifyContent="space-between"
 			width={100}
 		>
 			{/* Header */}
@@ -80,18 +80,20 @@ const Column = ({title, cards, columnIndex, isFocused}: ColumnProps) => {
 				<Text color={color}>{title}</Text>
 			</Box>
 			{/* Kanban cards */}
-			{visibleCards.map((card, index) => (
-				<Card
-					key={card.id}
-					card={card}
-					height={CARD_HEIGHT}
-					isActive={
-						isFocused &&
-						index + startIndex === focusState.active.cardIndex &&
-						columnIndex === focusState.active.columnIndex
-					}
-				/>
-			))}
+			<Box flexDirection="column" flexGrow={1} paddingTop={0} paddingBottom={0}>
+				{visibleCards.map((card, index) => (
+					<Card
+						key={card.id}
+						card={card}
+						isActive={
+							isFocused &&
+							index + startIndex === focusState.active.cardIndex &&
+							columnIndex === focusState.active.columnIndex
+						}
+					/>
+				))}
+			</Box>
+
 			{/* Footer */}
 			<Box justifyContent="center" height={FOOTER_HEIGHT}>
 				<Text color={COLOR.SECONDARY_DIM} dimColor>

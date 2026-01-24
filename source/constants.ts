@@ -13,6 +13,9 @@ export const COLOR = {
 };
 
 export const LAYOUT = {
+	/* CARD_HEIGHT includes 1 row each
+	 * for top & bottom border line.
+	 */
 	CARD_HEIGHT: 7,
 	HEADER_HEIGHT: 1,
 	FOOTER_HEIGHT: 2,

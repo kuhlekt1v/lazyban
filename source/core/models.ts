@@ -14,7 +14,7 @@ export interface Card {
 
 	assignee?: string;
 	labels?: string[];
-	priority: 'low' | 'medium' | 'high';
+	priority?: 'low' | 'medium' | 'high';
 	feature?: string;
 	points?: number;
 	/**
