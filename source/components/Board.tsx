@@ -14,7 +14,6 @@ type Props = {
 
 const Board = ({board}: Props) => {
 	const {debug} = useDebug();
-	const [focusedColumnIndex, setFocusedColumnIndex] = useState(0);
 	const [columnOffsets, setColumnOffsets] = useState(
 		Array(board.columns.length).fill(0),
 	);
@@ -30,13 +29,9 @@ const Board = ({board}: Props) => {
 				<Columns
 					columns={board.columns}
 					cards={board.cards}
-					focusedColumnIndex={focusedColumnIndex}
 					columnOffsets={columnOffsets}
 				/>
-				<Keybindings
-					setFocusedColumnIndex={setFocusedColumnIndex}
-					columns={board.columns}
-				/>
+				<Keybindings columns={board.columns} />
 			</ResizeAwareBox>
 		);
 	};

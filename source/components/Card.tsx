@@ -1,46 +1,50 @@
 import React from 'react';
-import {Newline, Text, useStdout} from 'ink';
+import {Newline, Text} from 'ink';
 import {COLOR} from '../constants.js';
 import {Card as ICard} from '../core/models.js';
 import Box from './Box.js';
 
 type CardProps = {
 	card: ICard;
-	height: number;
+	isActive: boolean;
 };
 
-const PADDING_X = 1;
+const displayText = (
+	text: string | null | undefined,
+	replacement: Element = <Text>&nbsp;</Text>,
+) => <Text>{text || replacement}</Text>;
 
-const Card = ({card, height}: CardProps) => {
-	const priorityMap: Record<string, {color: string; value: string}> = {
-		low: {color: COLOR.YELLOW, value: '[!  ]  '},
-		medium: {color: COLOR.ORANGE, value: '[!! ]  '},
-		high: {color: COLOR.RED, value: '[!!!]  '},
-	};
+const priorityMap: Record<string, {color: string; value: string}> = {
+	low: {color: COLOR.YELLOW, value: '[!  ]  '},
+	medium: {color: COLOR.ORANGE, value: '[!! ]  '},
+	high: {color: COLOR.RED, value: '[!!!]  '},
+};
+
+const Card = ({card, isActive}: CardProps) => {
+	const priority = card.priority && priorityMap[card.priority];
 
 	return (
 		<Box
 			display="flex"
-			paddingX={PADDING_X}
+			paddingX={1}
 			paddingY={0}
 			flexDirection="column"
-			justifyContent="space-between"
+			justifyContent="flex-start"
 			borderStyle="single"
-			borderColor={COLOR.SECONDARY}
-			height={height}
+			borderColor={isActive ? COLOR.PRIMARY : COLOR.SECONDARY}
+			width="100%"
+			minHeight={6}
 		>
-			<Text>
-				{card.id}: {card.title}
-			</Text>
+			<Text wrap="truncate">{displayText(`${card.id}: ${card.title}`)}</Text>
 			<Text backgroundColor={COLOR.HIGHLIGHT} color="black">
-				{card.feature}
+				{displayText(card.feature)}
 			</Text>
-			<Text wrap="truncate">{card.description}</Text>
+			<Text wrap="truncate">{displayText(card.description)}</Text>
 			<Text>
-				<Text color={priorityMap[card.priority]?.color ?? undefined}>
-					{priorityMap[card.priority]?.value ?? '[   ]  '}
+				<Text color={priority?.color}>
+					{displayText(priority?.value, '[   ]  ')}
 				</Text>
-				<Text>{card.points ?? '-'}</Text>
+				<Text>{displayText(card.points as unknown as string, '-')}</Text>
 			</Text>
 		</Box>
 	);
