@@ -60,12 +60,17 @@ const Column = ({title, cards, columnIndex, isFocused}: ColumnProps) => {
 		cards.length,
 	);
 
-	const footerText =
-		cards.length > 0
-			? isFocused
-				? `${firstVisible}-${lastVisible} of ${totalCards}`
-				: `1-${Math.min(visibleCardsPerColumn, cards.length)} of ${totalCards}`
-			: '';
+	let footerText: string;
+	if (cards.length === 0) {
+		footerText = '0-0 of 0';
+	} else if (isFocused) {
+		footerText = `${firstVisible}-${lastVisible} of ${totalCards}`;
+	} else {
+		footerText = `1-${Math.min(
+			visibleCardsPerColumn,
+			cards.length,
+		)} of ${totalCards}`;
+	}
 
 	return (
 		<Box

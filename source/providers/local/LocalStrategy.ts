@@ -31,7 +31,7 @@ export class LocalStrategy implements KanbanStrategy {
 					description:
 						'Create detail view component with proper focus management and keyboard navigation',
 					boardId: 'board-1',
-					columnId: 'todo',
+					columnId: 'doing',
 					priority: 'high',
 					feature: 'Card Details',
 					points: 5,
