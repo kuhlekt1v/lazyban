@@ -1,15 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {Text} from 'ink';
+import {Text, useInput} from 'ink';
 import {KanbanContext} from './core/KanbanContext.js';
 
 import {Board as IBoard} from './core/models.js';
 import Board from './components/Board.js';
-import {CommandContext} from './context/CommandContext.js';
+import Box from './components/Box.js';
+import Overlay from './components/Overlay.js';
 
-type Commands = {
-	clear: () => void;
-	exit: () => void;
-};
 type Props = {
 	context: KanbanContext;
 };
@@ -20,6 +17,21 @@ export default function App({context}: Props) {
 	const [status, setStatus] = useState<
 		'loading' | 'create' | 'select' | 'show'
 	>('loading');
+
+	const [isOverlayOpen, setIsOverlayOpen] = useState(false);
+
+	const handleCloseModal = () => {
+		setIsOverlayOpen(false);
+	};
+
+	useInput(
+		input => {
+			if (input === '?') {
+				setIsOverlayOpen(true);
+			}
+		},
+		{isActive: !isOverlayOpen},
+	);
 
 	useEffect(() => {
 		const loadBoards = async () => {
@@ -42,7 +54,14 @@ export default function App({context}: Props) {
 	if (status === 'loading') return <Text>Loading board...</Text>;
 	if (status === 'create') return <Text>Prompt: Create a new board</Text>;
 	if (status === 'select') return <Text>Prompt: Select a board</Text>;
-	if (status === 'show' && board) return <Board board={board} />;
+	if (status === 'show' && board) {
+		return (
+			<Box width="100%" height="100%">
+				<Board board={board} />
+				{isOverlayOpen && <Overlay onClose={handleCloseModal} />}
+			</Box>
+		);
+	}
 
 	return null;
 }

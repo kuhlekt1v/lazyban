@@ -10,6 +10,7 @@ export const COLOR = {
 	YELLOW: '#FFF9C4',
 	ORANGE: '#F6B26B',
 	RED: '#E06666',
+	PRIMARY_BACKGROUND: '#151515',
 };
 
 export const LAYOUT = {
