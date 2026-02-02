@@ -1,8 +1,9 @@
 import {KanbanStrategy} from './KanbanStrategy.js';
 import {Card, Board} from './models.js';
 
-// TODO: Add error handling and logging.
-//
+/* TODO: Rename KanbanController
+ *       & update mermaid diagram.
+ */
 export class KanbanContext {
 	constructor(private strategy: KanbanStrategy) {}
 

@@ -1,9 +1,11 @@
 // context/AppEnvContext.tsx
 import {createContext, useContext} from 'react';
+import {Theme} from '../core/theme.js';
 
 export type AppEnv = {
 	clear: () => void;
 	unmount: () => void;
+	theme: Theme;
 };
 
 const AppEnvContext = createContext<AppEnv | null>(null);
@@ -26,3 +28,5 @@ export const useAppEnv = () => {
 	}
 	return ctx;
 };
+
+export const useTheme = () => useAppEnv().theme;

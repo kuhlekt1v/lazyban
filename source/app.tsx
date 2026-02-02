@@ -6,12 +6,14 @@ import {Board as IBoard} from './core/models.js';
 import Board from './components/Board.js';
 import Box from './components/Box.js';
 import Overlay from './components/Overlay.js';
+import {useTheme} from './context/AppEnvContext.js';
 
 type Props = {
 	context: KanbanContext;
 };
 
 export default function App({context}: Props) {
+	const theme = useTheme();
 	const [, setBoards] = useState<IBoard[]>([]);
 	const [board, setBoard] = useState<IBoard | null>(null);
 	const [status, setStatus] = useState<
@@ -56,7 +58,11 @@ export default function App({context}: Props) {
 	if (status === 'select') return <Text>Prompt: Select a board</Text>;
 	if (status === 'show' && board) {
 		return (
-			<Box width="100%" height="100%">
+			<Box
+				width="100%"
+				height="100%"
+				backgroundColor={theme.PRIMARY_BACKGROUND}
+			>
 				<Board board={board} />
 				{isOverlayOpen && <Overlay onClose={handleCloseModal} />}
 			</Box>
