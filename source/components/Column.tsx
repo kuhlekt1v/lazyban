@@ -5,6 +5,7 @@ import Card from './Card.js';
 import {Card as ICard} from '../core/models.js';
 import Box from './Box.js';
 import {useFocus} from '../context/FocusContext.js';
+import {useTheme} from '../context/AppEnvContext.js';
 
 type ColumnProps = {
 	title: string;
@@ -14,6 +15,7 @@ type ColumnProps = {
 };
 
 const Column = ({title, cards, columnIndex, isFocused}: ColumnProps) => {
+	const theme = useTheme();
 	const {stdout} = useStdout();
 	const {focusState, cardsPerColumn} = useFocus();
 	const {HEADER_HEIGHT, FOOTER_HEIGHT, CARD_HEIGHT} = LAYOUT;
@@ -34,7 +36,7 @@ const Column = ({title, cards, columnIndex, isFocused}: ColumnProps) => {
 		startIndex + visibleCardsPerColumn,
 	);
 
-	const color = isFocused ? COLOR.PRIMARY : COLOR.SECONDARY;
+	const color = isFocused ? theme.PRIMARY : theme.SECONDARY;
 
 	/* Dynamically resize column body if terminal
 	 * manually resized (e.g. user click & drag).
@@ -79,6 +81,7 @@ const Column = ({title, cards, columnIndex, isFocused}: ColumnProps) => {
 			flexDirection="column"
 			justifyContent="space-between"
 			width={100}
+			backgroundColor={theme.PRIMARY_BACKGROUND}
 		>
 			{/* Header */}
 			<Box height={HEADER_HEIGHT} justifyContent="center" alignItems="center">
@@ -101,7 +104,7 @@ const Column = ({title, cards, columnIndex, isFocused}: ColumnProps) => {
 
 			{/* Footer */}
 			<Box justifyContent="center" height={FOOTER_HEIGHT}>
-				<Text color={COLOR.SECONDARY_DIM} dimColor>
+				<Text color={theme.SECONDARY_DIM} dimColor>
 					{footerText}
 				</Text>
 			</Box>

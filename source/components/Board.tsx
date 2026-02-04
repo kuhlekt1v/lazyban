@@ -7,12 +7,14 @@ import Columns from './Columns.js';
 import {DebugPanel} from './DebugPanel.js';
 import {useDebug} from '../context/DebugContext.js';
 import Box from './Box.js';
+import {useTheme} from '../context/AppEnvContext.js';
 
 type Props = {
 	board: Board;
 };
 
 const Board = ({board}: Props) => {
+	const theme = useTheme();
 	const {debug} = useDebug();
 	const [columnOffsets, setColumnOffsets] = useState(
 		Array(board.columns.length).fill(0),
@@ -23,8 +25,9 @@ const Board = ({board}: Props) => {
 			<ResizeAwareBox
 				borderStyle="round"
 				borderTitle={`Board | ${board.name}`}
-				borderColor={COLOR.SECONDARY}
+				borderColor={theme.SECONDARY}
 				flexDirection="column"
+				backgroundColor={theme.PRIMARY_BACKGROUND}
 			>
 				<Columns
 					columns={board.columns}

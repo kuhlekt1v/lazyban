@@ -1,6 +1,6 @@
 import {Text, useInput} from 'ink';
 import Box from './Box.js';
-import {COLOR} from '../constants.js';
+import {useTheme} from '../context/AppEnvContext.js';
 
 type OverlayProps = {
 	height: number;
@@ -8,6 +8,7 @@ type OverlayProps = {
 	onClose: () => void;
 };
 const Overlay = ({onClose, height = 50, width = 50}: OverlayProps) => {
+	const theme = useTheme();
 	const heightPercent = `${height}%`;
 	const widthPercent = `${height}%`;
 
@@ -30,10 +31,10 @@ const Overlay = ({onClose, height = 50, width = 50}: OverlayProps) => {
 		>
 			<Box
 				borderStyle="round"
-				borderColor={COLOR.PRIMARY}
+				borderColor={theme.PRIMARY}
 				width={widthPercent}
 				height={heightPercent}
-				backgroundColor="black"
+				backgroundColor={theme.PRIMARY_BACKGROUND}
 			>
 				<Text>Esc to close</Text>
 			</Box>

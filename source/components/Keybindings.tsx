@@ -1,16 +1,17 @@
 import React from 'react';
 import {Box, Text, useInput} from 'ink';
-import {COLOR, COMMANDS} from '../constants.js';
+import {COMMANDS} from '../constants.js';
 import {Column, Command} from '../core/models.js';
 import {FOCUS_ACTION, useFocus} from '../context/FocusContext.js';
 import {useDebug} from '../context/DebugContext.js';
-import {useAppEnv} from '../context/AppEnvContext.js';
+import {useAppEnv, useTheme} from '../context/AppEnvContext.js';
 
 type Props = {
 	columns: Column[];
 };
 
 const Keybindings = ({columns}: Props) => {
+	const theme = useTheme();
 	const {nextColumn, prevColumn, nextCard, prevCard} = useFocus();
 	const {addStatement} = useDebug();
 	const {clear, unmount} = useAppEnv();
@@ -79,7 +80,7 @@ const Keybindings = ({columns}: Props) => {
 				let title = `${inputDisplay}: ${command.title}`;
 				if (index + 1 !== displayedCommands.length) title = `${title} | `;
 				return (
-					<Text key={index} color={COLOR.ALT_HIGHLIGHT}>
+					<Text key={index} color={theme.ALT_HIGHLIGHT}>
 						{title}
 					</Text>
 				);

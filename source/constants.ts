@@ -1,18 +1,6 @@
 import {FOCUS_ACTION} from './context/FocusContext.js';
 import {Command} from './core/models.js';
 
-export const COLOR = {
-	PRIMARY: '#79A0C9',
-	SECONDARY: '#EAEBF2',
-	HIGHLIGHT: '#A3D9A5',
-	ALT_HIGHLIGHT: '#D6C8FF',
-	SECONDARY_DIM: '#A8A9B3',
-	YELLOW: '#FFF9C4',
-	ORANGE: '#F6B26B',
-	RED: '#E06666',
-	PRIMARY_BACKGROUND: '#151515',
-};
-
 export const LAYOUT = {
 	/* CARD_HEIGHT includes 1 row each
 	 * for top & bottom border line.
