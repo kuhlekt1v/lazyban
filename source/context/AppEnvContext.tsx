@@ -1,10 +1,9 @@
 // context/AppEnvContext.tsx
 import {createContext, useContext} from 'react';
 import {Theme} from '../core/theme.js';
+import {Instance} from 'ink';
 
-export type AppEnv = {
-	clear: () => void;
-	unmount: () => void;
+export type AppEnv = Instance & {
 	theme: Theme;
 };
 

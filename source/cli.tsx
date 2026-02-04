@@ -18,7 +18,7 @@ const ink = render(<div />);
 
 render(
 	// @ts-ignore
-	<AppEnvProvider env={{ink, theme}}>
+	<AppEnvProvider env={{...ink, theme}}>
 		<DebugProvider debug={debug}>
 			<FocusProvider>
 				<App context={context} />
