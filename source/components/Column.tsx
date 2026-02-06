@@ -27,7 +27,7 @@ const Column = ({title, cards, columnIndex, isFocused}: ColumnProps) => {
 	const activeCardIndex = focusState.active.cardIndex;
 	const visibleCardsPerColumn = Math.floor(bodyHeight / CARD_HEIGHT);
 	const startIndex = isFocused
-		? Math.floor(activeCardIndex / visibleCardsPerColumn) *
+		? Math.floor(activeCardIndex! / visibleCardsPerColumn) *
 		  visibleCardsPerColumn
 		: 0;
 
@@ -55,7 +55,7 @@ const Column = ({title, cards, columnIndex, isFocused}: ColumnProps) => {
 
 	const totalCards = cardsPerColumn[columnIndex] ?? 0;
 
-	const firstVisible = isFocused ? focusState.active.cardIndex + 1 : 1;
+	const firstVisible = isFocused ? focusState.active.cardIndex! + 1 : 1;
 
 	const lastVisible = Math.min(
 		startIndex + visibleCardsPerColumn,

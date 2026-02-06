@@ -12,7 +12,7 @@ type Props = {
 
 const Keybindings = ({columns}: Props) => {
 	const theme = useTheme();
-	const {nextColumn, prevColumn, nextCard, prevCard} = useFocus();
+	const {nextColumn, prevColumn, nextCard, prevCard, expandCard} = useFocus();
 	const {addStatement} = useDebug();
 	const {clear, unmount} = useAppEnv();
 
@@ -25,6 +25,7 @@ const Keybindings = ({columns}: Props) => {
 		else if (key.downArrow) trigger = 'downArrow';
 		else if (key.rightArrow) trigger = 'rightArrow';
 		else if (key.upArrow) trigger = 'upArrow';
+		else if (key.return) trigger = 'return';
 
 		const cmd = COMMANDS.find(c => c.input.includes(trigger));
 		addStatement('Pressed', trigger);
@@ -48,6 +49,10 @@ const Keybindings = ({columns}: Props) => {
 					break;
 				case FOCUS_ACTION.PREV_CARD:
 					prevCard();
+					break;
+
+				case FOCUS_ACTION.EXPAND_CARD:
+					expandCard();
 					break;
 
 				default:

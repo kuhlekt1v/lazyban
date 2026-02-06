@@ -15,11 +15,18 @@ export const FOCUS_ACTION = {
 	PREV_CARD: 'PREV_CARD',
 	QUIT: 'QUIT',
 	KEYBINDINGS: 'KEYBINDINGS',
+	EXPAND_CARD: 'EXPAND_CARD',
 } as const;
 
 type Action =
-	| {type: typeof FOCUS_ACTION.NEXT_COL}
-	| {type: typeof FOCUS_ACTION.PREV_COL}
+	| {
+			type: typeof FOCUS_ACTION.NEXT_COL;
+			payload: {cardsInCol: number | undefined};
+	  }
+	| {
+			type: typeof FOCUS_ACTION.PREV_COL;
+			payload: {cardsInCol: number | undefined};
+	  }
 	| {
 			type: typeof FOCUS_ACTION.NEXT_CARD;
 			payload: {cardsInCol: number | undefined};
@@ -27,27 +34,34 @@ type Action =
 	| {
 			type: typeof FOCUS_ACTION.PREV_CARD;
 			payload: {cardsInCol: number | undefined};
+	  }
+	| {
+			type: typeof FOCUS_ACTION.EXPAND_CARD;
+			payload: {cardsInCol: number | undefined};
 	  };
 
 export interface FocusState {
 	active: {
 		columnIndex: number;
-		cardIndex: number;
+		cardIndex: number | undefined;
 	};
+	cardDetailOpen: boolean;
 }
 
 interface FocusContextValue {
 	focusState: FocusState;
 	cardsPerColumn: number[];
-	setCardsPerColumn: (cards: number[]) => void;
 	nextColumn: () => void;
 	prevColumn: () => void;
 	nextCard: () => void;
 	prevCard: () => void;
+	expandCard: () => void;
+	setCardsPerColumn: (cards: number[]) => void;
 }
 
 const initialState: FocusState = {
 	active: {columnIndex: 0, cardIndex: 0},
+	cardDetailOpen: false,
 };
 function wrap(index: number, count: number) {
 	if (count <= 0) return 0;
@@ -59,24 +73,24 @@ const reducer = (state: FocusState, action: Action): FocusState => {
 
 	switch (action.type) {
 		case FOCUS_ACTION.NEXT_COL: {
-			const nextCol = wrap(state.active.columnIndex + 1, LAYOUT.TOTAL_COLUMN);
-
+			const cardsInCol = action.payload.cardsInCol ?? 0;
 			return {
 				...state,
 				active: {
-					columnIndex: nextCol,
-					cardIndex: 0,
+					...state.active,
+					columnIndex: wrap(state.active.columnIndex + 1, LAYOUT.TOTAL_COLUMN),
+					cardIndex: cardsInCol > 0 ? 0 : undefined,
 				},
 			};
 		}
 		case FOCUS_ACTION.PREV_COL: {
-			const prevCol = wrap(state.active.columnIndex - 1, LAYOUT.TOTAL_COLUMN);
-
+			const cardsInCol = action.payload.cardsInCol ?? 0;
 			return {
 				...state,
 				active: {
-					columnIndex: prevCol,
-					cardIndex: 0,
+					...state.active,
+					columnIndex: wrap(state.active.columnIndex - 1, LAYOUT.TOTAL_COLUMN),
+					cardIndex: cardsInCol > 0 ? 0 : undefined,
 				},
 			};
 		}
@@ -88,8 +102,7 @@ const reducer = (state: FocusState, action: Action): FocusState => {
 				...state,
 				active: {
 					...state.active,
-
-					cardIndex: (state.active.cardIndex - 1 + cardsInCol) % cardsInCol,
+					cardIndex: (state.active.cardIndex! - 1 + cardsInCol) % cardsInCol,
 				},
 			};
 		}
@@ -97,17 +110,21 @@ const reducer = (state: FocusState, action: Action): FocusState => {
 			const cardsInCol = action.payload.cardsInCol ?? 0;
 
 			if (cardsInCol === 0) return state;
-
-			addStatement(
-				'activeCardIndex',
-				((state.active.cardIndex + 1) % cardsInCol) as unknown as string,
-			);
 			return {
 				...state,
 				active: {
 					...state.active,
-					cardIndex: (state.active.cardIndex + 1) % cardsInCol,
+					cardIndex: (state.active.cardIndex! + 1) % cardsInCol,
 				},
+			};
+		}
+		case FOCUS_ACTION.EXPAND_CARD: {
+			const cardsInCol = action.payload.cardsInCol ?? 0;
+
+			if (cardsInCol === 0) return state;
+			return {
+				...state,
+				cardDetailOpen: true,
 			};
 		}
 
@@ -124,14 +141,35 @@ const FocusContext = createContext<FocusContextValue>({
 	prevColumn: () => {},
 	nextCard: () => {},
 	prevCard: () => {},
+	expandCard: () => {},
 });
 
 export const FocusProvider = ({children}: {children: ReactNode}) => {
 	const [focusState, dispatch] = useReducer(reducer, initialState);
 	const [cardsPerColumn, setCardsPerColumn] = useState([]);
 
-	const nextColumn = () => dispatch({type: FOCUS_ACTION.NEXT_COL});
-	const prevColumn = () => dispatch({type: FOCUS_ACTION.PREV_COL});
+	const nextColumn = () => {
+		const nextCol = wrap(
+			focusState.active.columnIndex + 1,
+			LAYOUT.TOTAL_COLUMN,
+		);
+		dispatch({
+			type: FOCUS_ACTION.NEXT_COL,
+			payload: {cardsInCol: cardsPerColumn[nextCol]},
+		});
+	};
+
+	const prevColumn = () => {
+		const prevCol = wrap(
+			focusState.active.columnIndex - 1,
+			LAYOUT.TOTAL_COLUMN,
+		);
+		dispatch({
+			type: FOCUS_ACTION.PREV_COL,
+			payload: {cardsInCol: cardsPerColumn[prevCol]},
+		});
+	};
+
 	const nextCard = () =>
 		dispatch({
 			type: FOCUS_ACTION.NEXT_CARD,
@@ -140,6 +178,12 @@ export const FocusProvider = ({children}: {children: ReactNode}) => {
 	const prevCard = () =>
 		dispatch({
 			type: FOCUS_ACTION.PREV_CARD,
+			payload: {cardsInCol: cardsPerColumn[focusState.active.columnIndex]},
+		});
+	const expandCard = () =>
+		dispatch({
+			type: FOCUS_ACTION.EXPAND_CARD,
+
 			payload: {cardsInCol: cardsPerColumn[focusState.active.columnIndex]},
 		});
 
@@ -154,6 +198,7 @@ export const FocusProvider = ({children}: {children: ReactNode}) => {
 				prevColumn,
 				nextCard,
 				prevCard,
+				expandCard,
 			}}
 		>
 			{children}

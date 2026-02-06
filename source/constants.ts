@@ -54,4 +54,11 @@ export const COMMANDS: Command[] = [
 		description: 'Move focus up to next card in active column.',
 		display: true,
 	},
+	{
+		title: 'Expand Card Details',
+		input: ['return'],
+		action: FOCUS_ACTION.EXPAND_CARD,
+		description: 'Expand card to view full details.',
+		display: false,
+	},
 ];

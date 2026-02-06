@@ -8,12 +8,15 @@ import Box from './components/Box.js';
 import Overlay from './components/Overlay.js';
 import {useTheme} from './context/AppEnvContext.js';
 
+import {useFocus} from './context/FocusContext.js';
+
 type Props = {
 	context: KanbanContext;
 };
 
 export default function App({context}: Props) {
 	const theme = useTheme();
+	const {focusState} = useFocus();
 	const [, setBoards] = useState<IBoard[]>([]);
 	const [board, setBoard] = useState<IBoard | null>(null);
 	const [status, setStatus] = useState<
@@ -64,7 +67,7 @@ export default function App({context}: Props) {
 				backgroundColor={theme.PRIMARY_BACKGROUND}
 			>
 				<Board board={board} />
-				{isOverlayOpen && <Overlay onClose={handleCloseModal} />}
+				{focusState.cardDetailOpen && <Overlay onClose={handleCloseModal} />}
 			</Box>
 		);
 	}
