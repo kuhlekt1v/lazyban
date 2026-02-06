@@ -1,5 +1,6 @@
 import React from 'react';
-import {Box, useStdout} from 'ink';
+import {Box as InkBox, useStdout} from 'ink';
+import Box from './Box.js';
 import {
 	useEffect,
 	useRef,
@@ -9,7 +10,7 @@ import {
 } from 'react';
 import ansiEscapes from 'ansi-escapes';
 
-type BoxProps = ComponentProps<typeof Box>;
+type BoxProps = ComponentProps<typeof InkBox>;
 
 type ResizeAwareBoxProps = Omit<BoxProps, 'width' | 'height'> & {
 	children: ReactNode | ((dims: {height: number; width: number}) => ReactNode);

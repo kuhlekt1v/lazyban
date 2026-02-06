@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import {COLOR} from '../constants.js';
 import {Board} from '../core/models.js';
 import {ResizeAwareBox} from './ResizeAwareBox.js';
 import Keybindings from './Keybindings.js';
@@ -27,7 +26,6 @@ const Board = ({board}: Props) => {
 				borderTitle={`Board | ${board.name}`}
 				borderColor={theme.SECONDARY}
 				flexDirection="column"
-				backgroundColor={theme.PRIMARY_BACKGROUND}
 			>
 				<Columns
 					columns={board.columns}

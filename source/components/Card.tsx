@@ -34,7 +34,6 @@ const Card = ({card, isActive}: CardProps) => {
 			borderColor={isActive ? theme.PRIMARY : theme.SECONDARY}
 			width="100%"
 			minHeight={6}
-			backgroundColor={theme.PRIMARY_BACKGROUND}
 		>
 			<Text wrap="truncate">{displayText(`${card.id}: ${card.title}`)}</Text>
 			<Text backgroundColor={theme.HIGHLIGHT} color="black">

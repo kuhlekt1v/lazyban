@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {Text, useStdout} from 'ink';
-import {COLOR, LAYOUT} from '../constants.js';
+import {LAYOUT} from '../constants.js';
 import Card from './Card.js';
 import {Card as ICard} from '../core/models.js';
 import Box from './Box.js';
@@ -81,7 +81,6 @@ const Column = ({title, cards, columnIndex, isFocused}: ColumnProps) => {
 			flexDirection="column"
 			justifyContent="space-between"
 			width={100}
-			backgroundColor={theme.PRIMARY_BACKGROUND}
 		>
 			{/* Header */}
 			<Box height={HEADER_HEIGHT} justifyContent="center" alignItems="center">
