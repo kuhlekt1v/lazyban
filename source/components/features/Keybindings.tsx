@@ -3,7 +3,8 @@ import {COMMANDS} from '../../constants.js';
 import {Command} from '../../core/models.js';
 import {useDebug} from '../../context/DebugContext.js';
 import {useAppEnv, useTheme} from '../../context/AppEnvContext.js';
-import {FOCUS_ACTION, useFocus} from '../../context/FocusContext.js';
+import {FOCUS_ACTION} from '../../context/focusActions.js';
+import {useFocus} from '../../context/FocusContext.js';
 
 const Keybindings = () => {
 	const theme = useTheme();

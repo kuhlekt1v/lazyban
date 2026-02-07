@@ -1,4 +1,4 @@
-import {FOCUS_ACTION} from './context/FocusContext.js';
+import {FOCUS_ACTION} from './context/focusActions.js';
 import {Command} from './core/models.js';
 
 export const LAYOUT = {

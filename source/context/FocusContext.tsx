@@ -6,17 +6,7 @@ import React, {
 	useState,
 } from 'react';
 import {LAYOUT} from '../constants.js';
-
-export const FOCUS_ACTION = {
-	NEXT_COL: 'NEXT_COL',
-	PREV_COL: 'PREV_COL',
-	NEXT_CARD: 'NEXT_CARD',
-	PREV_CARD: 'PREV_CARD',
-	QUIT: 'QUIT',
-	KEYBINDINGS: 'KEYBINDINGS',
-	EXPAND_CARD: 'EXPAND_CARD',
-	CLOSE_OVERLAY: 'CLOSE_OVERLAY',
-} as const;
+import {FOCUS_ACTION} from './focusActions.js';
 
 export const OVERLAY_TYPE = {
 	DETAIL: 'DETAIL',
