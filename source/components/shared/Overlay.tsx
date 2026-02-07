@@ -1,26 +1,25 @@
-import {Text, useInput} from 'ink';
 import {Box} from './index.js';
+import {useInput} from 'ink';
 import {useTheme} from '../../context/AppEnvContext.js';
 import {OVERLAY_TYPE, useFocus} from '../../context/FocusContext.js';
+import {ReactNode} from 'react';
 
 type OverlayProps = {
 	height: number;
 	width: number;
+	children: ReactNode;
 };
-const Overlay = ({height = 50, width = 50}: OverlayProps) => {
+const Overlay = ({height = 50, width = 50, children}: OverlayProps) => {
 	const theme = useTheme();
 	const heightPercent = `${height}%`;
 	const widthPercent = `${width}%`;
 	const {closeOverlay} = useFocus();
 
-	useInput(
-		(_, key) => {
-			if (key.escape) {
-				closeOverlay(OVERLAY_TYPE.DETAIL);
-			}
-		},
-		{isActive: true},
-	);
+	useInput((_, key) => {
+		if (key.escape) {
+			closeOverlay(OVERLAY_TYPE.DETAIL);
+		}
+	});
 
 	return (
 		<Box
@@ -31,6 +30,7 @@ const Overlay = ({height = 50, width = 50}: OverlayProps) => {
 			height="100%"
 			alignItems="center"
 			justifyContent="center"
+			transparent={true}
 		>
 			<Box
 				borderStyle="round"
@@ -39,7 +39,7 @@ const Overlay = ({height = 50, width = 50}: OverlayProps) => {
 				height={heightPercent}
 				backgroundColor={theme.PRIMARY_BACKGROUND}
 			>
-				<Text>Esc to close</Text>
+				{children}
 			</Box>
 		</Box>
 	);

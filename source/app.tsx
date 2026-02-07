@@ -3,7 +3,7 @@ import {Text, useInput} from 'ink';
 import {KanbanContext} from './core/KanbanContext.js';
 
 import {Board as IBoard} from './core/models.js';
-import {Board} from './components/features/index.js';
+import {Board, CardDetails} from './components/features/index.js';
 import {Box, Overlay} from './components/shared/index.js';
 import {useTheme} from './context/AppEnvContext.js';
 
@@ -22,17 +22,6 @@ export default function App({context}: Props) {
 		'loading' | 'create' | 'select' | 'show'
 	>('loading');
 
-	const [isOverlayOpen, setIsOverlayOpen] = useState(false);
-
-	useInput(
-		input => {
-			if (input === '?') {
-				setIsOverlayOpen(true);
-			}
-		},
-		{isActive: !isOverlayOpen},
-	);
-
 	useEffect(() => {
 		const loadBoards = async () => {
 			const fetchedBoards = await context.getBoards();
@@ -41,7 +30,7 @@ export default function App({context}: Props) {
 			if (fetchedBoards.length === 0) {
 				setStatus('create');
 			} else if (fetchedBoards.length === 1) {
-				const b = await context.getBoard(fetchedBoards[0].id);
+				const b = await context.getBoard(fetchedBoards[0]!.id);
 				setBoard(b);
 				setStatus('show');
 			} else {
@@ -62,7 +51,11 @@ export default function App({context}: Props) {
 				backgroundColor={theme.PRIMARY_BACKGROUND}
 			>
 				<Board board={board} />
-				{focusState.cardDetailOpen && <Overlay />}
+				{focusState.cardDetailOpen && (
+					<Overlay>
+						<CardDetails />
+					</Overlay>
+				)}
 			</Box>
 		);
 	}
