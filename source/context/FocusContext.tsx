@@ -6,7 +6,6 @@ import React, {
 	useState,
 } from 'react';
 import {LAYOUT} from '../constants.js';
-import {useDebug} from './DebugContext.js';
 
 export const FOCUS_ACTION = {
 	NEXT_COL: 'NEXT_COL',
@@ -16,6 +15,12 @@ export const FOCUS_ACTION = {
 	QUIT: 'QUIT',
 	KEYBINDINGS: 'KEYBINDINGS',
 	EXPAND_CARD: 'EXPAND_CARD',
+	CLOSE_OVERLAY: 'CLOSE_OVERLAY',
+} as const;
+
+export const OVERLAY_TYPE = {
+	DETAIL: 'DETAIL',
+	HELP: 'HELP',
 } as const;
 
 type Action =
@@ -38,6 +43,10 @@ type Action =
 	| {
 			type: typeof FOCUS_ACTION.EXPAND_CARD;
 			payload: {cardsInCol: number | undefined};
+	  }
+	| {
+			type: typeof FOCUS_ACTION.CLOSE_OVERLAY;
+			payload: {overlay: keyof typeof OVERLAY_TYPE};
 	  };
 
 export interface FocusState {
@@ -46,6 +55,7 @@ export interface FocusState {
 		cardIndex: number | undefined;
 	};
 	cardDetailOpen: boolean;
+	helpMenuOpen: boolean;
 }
 
 interface FocusContextValue {
@@ -57,11 +67,13 @@ interface FocusContextValue {
 	prevCard: () => void;
 	expandCard: () => void;
 	setCardsPerColumn: (cards: number[]) => void;
+	closeOverlay: (type: keyof typeof OVERLAY_TYPE) => void;
 }
 
 const initialState: FocusState = {
 	active: {columnIndex: 0, cardIndex: 0},
 	cardDetailOpen: false,
+	helpMenuOpen: false,
 };
 function wrap(index: number, count: number) {
 	if (count <= 0) return 0;
@@ -69,8 +81,6 @@ function wrap(index: number, count: number) {
 }
 
 const reducer = (state: FocusState, action: Action): FocusState => {
-	const {addStatement} = useDebug();
-
 	switch (action.type) {
 		case FOCUS_ACTION.NEXT_COL: {
 			const cardsInCol = action.payload.cardsInCol ?? 0;
@@ -128,6 +138,17 @@ const reducer = (state: FocusState, action: Action): FocusState => {
 			};
 		}
 
+		case FOCUS_ACTION.CLOSE_OVERLAY: {
+			const {overlay} = action.payload;
+			if (overlay === 'DETAIL') {
+				return {...state, cardDetailOpen: false};
+			}
+			if (overlay === 'HELP') {
+				return {...state, helpMenuOpen: false};
+			}
+			return state;
+		}
+
 		default:
 			return state;
 	}
@@ -142,6 +163,7 @@ const FocusContext = createContext<FocusContextValue>({
 	nextCard: () => {},
 	prevCard: () => {},
 	expandCard: () => {},
+	closeOverlay: (_type: keyof typeof OVERLAY_TYPE) => {},
 });
 
 export const FocusProvider = ({children}: {children: ReactNode}) => {
@@ -187,6 +209,12 @@ export const FocusProvider = ({children}: {children: ReactNode}) => {
 			payload: {cardsInCol: cardsPerColumn[focusState.active.columnIndex]},
 		});
 
+	const closeOverlay = (type: keyof typeof OVERLAY_TYPE) =>
+		dispatch({
+			type: FOCUS_ACTION.CLOSE_OVERLAY,
+			payload: {overlay: type},
+		});
+
 	return (
 		// @ts-ignore
 		<FocusContext.Provider
@@ -199,6 +227,7 @@ export const FocusProvider = ({children}: {children: ReactNode}) => {
 				nextCard,
 				prevCard,
 				expandCard,
+				closeOverlay,
 			}}
 		>
 			{children}

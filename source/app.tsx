@@ -24,10 +24,6 @@ export default function App({context}: Props) {
 
 	const [isOverlayOpen, setIsOverlayOpen] = useState(false);
 
-	const handleCloseModal = () => {
-		setIsOverlayOpen(false);
-	};
-
 	useInput(
 		input => {
 			if (input === '?') {
@@ -66,7 +62,7 @@ export default function App({context}: Props) {
 				backgroundColor={theme.PRIMARY_BACKGROUND}
 			>
 				<Board board={board} />
-				{focusState.cardDetailOpen && <Overlay onClose={handleCloseModal} />}
+				{focusState.cardDetailOpen && <Overlay />}
 			</Box>
 		);
 	}
