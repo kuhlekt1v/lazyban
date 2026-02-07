@@ -1,11 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import {Text, useStdout} from 'ink';
-import {LAYOUT} from '../constants.js';
+import {LAYOUT} from '../../constants.js';
 import Card from './Card.js';
-import {Card as ICard} from '../core/models.js';
-import Box from './Box.js';
-import {useFocus} from '../context/FocusContext.js';
-import {useTheme} from '../context/AppEnvContext.js';
+import {Card as ICard} from '../../core/models.js';
+import {Box} from '../shared/index.js';
+import {useFocus} from '../../context/FocusContext.js';
+import {useTheme} from '../../context/AppEnvContext.js';
 
 type ColumnProps = {
 	title: string;

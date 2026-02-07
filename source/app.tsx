@@ -3,9 +3,8 @@ import {Text, useInput} from 'ink';
 import {KanbanContext} from './core/KanbanContext.js';
 
 import {Board as IBoard} from './core/models.js';
-import Board from './components/Board.js';
-import Box from './components/Box.js';
-import Overlay from './components/Overlay.js';
+import {Board} from './components/features/index.js';
+import {Box, Overlay} from './components/shared/index.js';
 import {useTheme} from './context/AppEnvContext.js';
 
 import {useFocus} from './context/FocusContext.js';

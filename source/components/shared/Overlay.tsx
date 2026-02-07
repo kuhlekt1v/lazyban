@@ -1,6 +1,6 @@
 import {Text, useInput} from 'ink';
-import Box from './Box.js';
-import {useTheme} from '../context/AppEnvContext.js';
+import {Box} from './index.js';
+import {useTheme} from '../../context/AppEnvContext.js';
 
 type OverlayProps = {
 	height: number;
@@ -10,7 +10,7 @@ type OverlayProps = {
 const Overlay = ({onClose, height = 50, width = 50}: OverlayProps) => {
 	const theme = useTheme();
 	const heightPercent = `${height}%`;
-	const widthPercent = `${height}%`;
+	const widthPercent = `${width}%`;
 
 	useInput(
 		(_, key) => {

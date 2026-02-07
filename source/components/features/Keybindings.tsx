@@ -1,16 +1,11 @@
-import React from 'react';
 import {Box, Text, useInput} from 'ink';
-import {COMMANDS} from '../constants.js';
-import {Column, Command} from '../core/models.js';
-import {FOCUS_ACTION, useFocus} from '../context/FocusContext.js';
-import {useDebug} from '../context/DebugContext.js';
-import {useAppEnv, useTheme} from '../context/AppEnvContext.js';
+import {COMMANDS} from '../../constants.js';
+import {Command} from '../../core/models.js';
+import {useDebug} from '../../context/DebugContext.js';
+import {useAppEnv, useTheme} from '../../context/AppEnvContext.js';
+import {FOCUS_ACTION, useFocus} from '../../context/FocusContext.js';
 
-type Props = {
-	columns: Column[];
-};
-
-const Keybindings = ({columns}: Props) => {
+const Keybindings = () => {
 	const theme = useTheme();
 	const {nextColumn, prevColumn, nextCard, prevCard, expandCard} = useFocus();
 	const {addStatement} = useDebug();

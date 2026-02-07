@@ -1,8 +1,8 @@
 import React from 'react';
-import {Column as IColumn, Card as ICard} from '../core/models.js';
-import Column from './Column.js';
-import Box from './Box.js';
-import {useFocus} from '../context/FocusContext.js';
+import {Column as IColumn, Card as ICard} from '../../core/models.js';
+import {Column} from './index.js';
+import {Box} from '../shared/index.js';
+import {useFocus} from '../../context/FocusContext.js';
 
 type Props = {
 	columns: IColumn[];

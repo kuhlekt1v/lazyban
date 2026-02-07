@@ -1,8 +1,7 @@
-import React from 'react';
 import {Text} from 'ink';
-import {Card as ICard} from '../core/models.js';
-import Box from './Box.js';
-import {useTheme} from '../context/AppEnvContext.js';
+import {Box} from '../shared/index.js';
+import {Card as ICard} from '../../core/models.js';
+import {useTheme} from '../../context/AppEnvContext.js';
 
 type CardProps = {
 	card: ICard;

@@ -1,8 +1,8 @@
-import React, {ReactNode} from 'react';
-import {Box, Newline, Text} from 'ink';
-import {useDebug} from '../context/DebugContext.js';
+import {Newline, Text} from 'ink';
+import {Box} from '../shared/index.js';
+import {useDebug} from '../../context/DebugContext.js';
 
-export function DebugPanel({children}: {children: ReactNode}) {
+const DebugPanel = () => {
 	const {debug, debugStatements} = useDebug();
 	if (!debug) return null;
 
@@ -26,4 +26,6 @@ export function DebugPanel({children}: {children: ReactNode}) {
 			</Text>
 		</Box>
 	);
-}
+};
+
+export default DebugPanel;
