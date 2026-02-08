@@ -6,15 +6,16 @@ import Columns from './Columns.js';
 import {DebugPanel} from './index.js';
 import {useDebug} from '../../context/DebugContext.js';
 import {Box} from '../shared/index.js';
-import {useTheme} from '../../context/AppEnvContext.js';
+import {useApp, useTheme} from '../../context/AppContext.js';
 
-type Props = {
-	board: Board;
-};
-
-const Board = ({board}: Props) => {
+const Board = () => {
 	const theme = useTheme();
+
+	const {board} = useApp();
+	if (!board) return null;
+
 	const {debug} = useDebug();
+
 	const [columnOffsets, setColumnOffsets] = useState(
 		Array(board.columns.length).fill(0),
 	);

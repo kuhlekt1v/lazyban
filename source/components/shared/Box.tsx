@@ -1,5 +1,5 @@
 import {BoxProps as InkBoxProps, Box as InkBox} from 'ink';
-import {useTheme} from '../../context/AppEnvContext.js';
+import {useTheme} from '../../context/AppContext.js';
 
 /* Box resolves known error. Ink's Element type is not
  * assignabled to React.ReactNode, but safe in Ink CLI.

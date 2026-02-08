@@ -2,7 +2,7 @@ import {Box, Text, useInput} from 'ink';
 import {COMMANDS} from '../../constants.js';
 import {Command} from '../../core/models.js';
 import {useDebug} from '../../context/DebugContext.js';
-import {useAppEnv, useTheme} from '../../context/AppEnvContext.js';
+import {useApp, useTheme} from '../../context/AppContext.js';
 import {FOCUS_ACTION} from '../../context/focusActions.js';
 import {useFocus} from '../../context/FocusContext.js';
 
@@ -10,7 +10,7 @@ const Keybindings = () => {
 	const theme = useTheme();
 	const {nextColumn, prevColumn, nextCard, prevCard, expandCard} = useFocus();
 	const {addStatement} = useDebug();
-	const {clear, unmount} = useAppEnv();
+	const {clear, unmount} = useApp();
 
 	const displayedCommands = COMMANDS.filter(command => command.display);
 

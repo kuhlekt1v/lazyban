@@ -1,7 +1,7 @@
 import {Text} from 'ink';
 import {Box} from '../shared/index.js';
 import {Card as ICard} from '../../core/models.js';
-import {useTheme} from '../../context/AppEnvContext.js';
+import {useTheme} from '../../context/AppContext.js';
 
 type CardProps = {
 	card: ICard;

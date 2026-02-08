@@ -1,10 +1,7 @@
 import {KanbanStrategy} from './KanbanStrategy.js';
 import {Card, Board} from './models.js';
 
-/* TODO: Rename KanbanController
- *       & update mermaid diagram.
- */
-export class KanbanContext {
+export class KanbanService {
 	constructor(private strategy: KanbanStrategy) {}
 
 	setStrategy(strategy: KanbanStrategy) {

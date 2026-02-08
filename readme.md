@@ -70,7 +70,7 @@ classDiagram
     }
 
     %% Context
-    class KanbanContext {
+    class KanbanService {
         -strategy: KanbanStrategy
         +setStrategy(strategy: KanbanStrategy): void
         +renderBoard()
@@ -96,8 +96,8 @@ classDiagram
     Client --> ProviderRegistry
     ProviderRegistry --> KanbanStrategy
 
-    Client --> KanbanContext
-    KanbanContext o--> KanbanStrategy
+    Client --> KanbanService
+    KanbanService o--> KanbanStrategy
 
     LocalStrategy ..|> KanbanStrategy
     JiraStrategy ..|> KanbanStrategy

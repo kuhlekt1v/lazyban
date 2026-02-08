@@ -1,6 +1,6 @@
 import {Box} from './index.js';
 import {useInput} from 'ink';
-import {useTheme} from '../../context/AppEnvContext.js';
+import {useTheme} from '../../context/AppContext.js';
 import {OVERLAY_TYPE, useFocus} from '../../context/FocusContext.js';
 import {ReactNode} from 'react';
 
