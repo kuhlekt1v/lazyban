@@ -29,7 +29,7 @@ const Columns = () => {
 	// Update cardsPerColumn in context when columns or cards change
 	useEffect(() => {
 		setCardsPerColumn(cardsPerColumn);
-	}, [cardsPerColumn, setCardsPerColumn]);
+	}, [cardsPerColumn]); // setCardsPerColumn is memoized and stable, no need in deps
 
 	return (
 		<Box height={100}>

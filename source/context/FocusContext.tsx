@@ -1,9 +1,10 @@
-import React, {
+import {
 	ReactNode,
 	useContext,
 	useReducer,
 	createContext,
 	useState,
+	useCallback,
 } from 'react';
 import {LAYOUT} from '../constants.js';
 import {FOCUS_ACTION} from './focusActions.js';
@@ -158,7 +159,12 @@ const FocusContext = createContext<FocusContextValue>({
 
 export const FocusProvider = ({children}: {children: ReactNode}) => {
 	const [focusState, dispatch] = useReducer(reducer, initialState);
-	const [cardsPerColumn, setCardsPerColumn] = useState([]);
+	const [cardsPerColumn, setCardsPerColumnState] = useState<number[]>([]);
+
+	// Memoize setCardsPerColumn to prevent unnecessary rerenders
+	const setCardsPerColumn = useCallback((cards: number[]) => {
+		setCardsPerColumnState(cards);
+	}, []);
 
 	const nextColumn = () => {
 		const nextCol = wrap(
