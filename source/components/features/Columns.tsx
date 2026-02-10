@@ -1,4 +1,4 @@
-import {useMemo, useEffect} from 'react';
+import {useMemo, useEffect, useRef} from 'react';
 
 import {Column as IColumn, Card as ICard} from '../../core/models.js';
 import {useFocus} from '../../context/FocusContext.js';
@@ -26,10 +26,22 @@ const Columns = () => {
 		[columns, cards],
 	);
 
-	// Update cardsPerColumn in context when columns or cards change
+	// Track previous value to avoid unnecessary updates
+	const prevCardsPerColumnRef = useRef<number[]>([]);
+
+	// Update cardsPerColumn in context only when values actually change
 	useEffect(() => {
-		setCardsPerColumn(cardsPerColumn);
-	}, [cardsPerColumn]); // setCardsPerColumn is memoized and stable, no need in deps
+		const prev = prevCardsPerColumnRef.current;
+		// Deep compare: check if array length or any value changed
+		const hasChanged =
+			prev.length !== cardsPerColumn.length ||
+			cardsPerColumn.some((count, index) => count !== prev[index]);
+
+		if (hasChanged) {
+			setCardsPerColumn(cardsPerColumn);
+			prevCardsPerColumnRef.current = cardsPerColumn;
+		}
+	}, [cardsPerColumn, setCardsPerColumn]);
 
 	return (
 		<Box height={100}>
