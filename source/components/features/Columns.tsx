@@ -1,20 +1,20 @@
-import React from 'react';
+import {useMemo, useEffect} from 'react';
 import {Column as IColumn, Card as ICard} from '../../core/models.js';
 import {Column} from './index.js';
 import {Box} from '../shared/index.js';
 import {useFocus} from '../../context/FocusContext.js';
+import {useApp} from '../../context/AppContext.js';
 
-type Props = {
-	columns: IColumn[];
-	cards: ICard[];
-	columnOffsets: number[];
-};
-
-const Columns = ({columns, cards, columnOffsets}: Props) => {
+const Columns = () => {
+	const {board} = useApp();
 	const {focusState, setCardsPerColumn} = useFocus();
 
+	const columns: IColumn[] = board.columns;
+	const cards: ICard[] = board.cards;
+	const columnOffsets = Array(columns.length).fill(0);
+
 	// Compute cards per column
-	const cardsPerColumn = React.useMemo(
+	const cardsPerColumn = useMemo(
 		() =>
 			columns.map(
 				column =>
@@ -25,7 +25,7 @@ const Columns = ({columns, cards, columnOffsets}: Props) => {
 	);
 
 	// Update cardsPerColumn in context when columns or cards change
-	React.useEffect(() => {
+	useEffect(() => {
 		setCardsPerColumn(cardsPerColumn);
 	}, [cardsPerColumn, setCardsPerColumn]);
 

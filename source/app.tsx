@@ -1,8 +1,3 @@
-import {useState, useEffect} from 'react';
-import {Text} from 'ink';
-import {KanbanService} from './core/KanbanService.js';
-
-import {Board as IBoard} from './core/models.js';
 import {Board, CardDetails} from './components/features/index.js';
 import {Box, Overlay} from './components/shared/index.js';
 import {useTheme} from './context/AppContext.js';

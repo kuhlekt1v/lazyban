@@ -6,8 +6,8 @@ import {KanbanService} from '../core/KanbanService.js';
 
 type AppContextValue = InkInstance & {
 	theme: Theme;
-	board: Board | null;
-	setBoard: (board: Board | null) => void;
+	board: Board;
+	setBoard: (board: Board) => void;
 	status: 'loading' | 'show' | 'error';
 	kanbanService: KanbanService;
 };
@@ -25,7 +25,7 @@ type ProviderProps = {
 const AppContext = createContext<AppContextValue | null>(null);
 
 export const AppProvider = ({context, children}: ProviderProps) => {
-	const [board, setBoard] = useState<Board | null>(null);
+	const [board, setBoard] = useState<Board | undefined>(undefined);
 	const [status, setStatus] = useState<'loading' | 'show' | 'error'>('loading');
 
 	useEffect(() => {
@@ -46,6 +46,13 @@ export const AppProvider = ({context, children}: ProviderProps) => {
 		};
 		loadBoard();
 	}, [context.kanbanService, context.boardId]);
+
+	if (status === 'loading') {
+		return <>{/* Render loading UI here */}</>;
+	}
+	if (status === 'error' || !board) {
+		return <>{/* Render error UI here */}</>;
+	}
 
 	const value: AppContextValue = {
 		...context.env,
