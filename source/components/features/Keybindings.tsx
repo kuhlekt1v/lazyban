@@ -1,9 +1,11 @@
 import {Box, Text, useInput} from 'ink';
-import {COMMANDS} from '../../constants.js';
+
 import {Command} from '../../core/models.js';
-import {useDebug} from '../../context/DebugContext.js';
+import {COMMANDS} from '../../constants.js';
+
 import {useApp, useTheme} from '../../context/AppContext.js';
 import {FOCUS_ACTION} from '../../context/focusActions.js';
+import {useDebug} from '../../context/DebugContext.js';
 import {useFocus} from '../../context/FocusContext.js';
 
 const Keybindings = () => {

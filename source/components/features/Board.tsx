@@ -25,7 +25,7 @@ const Board = () => {
 				flexDirection="column"
 			>
 				<Columns />
-				<Keybindings columns={board.columns} />
+				<Keybindings />
 			</ResizeAwareBox>
 		);
 	};

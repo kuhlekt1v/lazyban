@@ -2,20 +2,18 @@ import React, {useState, useEffect} from 'react';
 import {Text, useStdout} from 'ink';
 import {LAYOUT} from '../../constants.js';
 import Card from './Card.js';
-import {Card as ICard} from '../../core/models.js';
+import {Column, Card as ICard, ID} from '../../core/models.js';
 import {Box} from '../shared/index.js';
 import {useFocus} from '../../context/FocusContext.js';
-import {useTheme} from '../../context/AppContext.js';
+import {useApp, useTheme} from '../../context/AppContext.js';
 
 type ColumnProps = {
-	title: string;
-	cards: ICard[];
-	columnIndex: number;
-	isFocused: boolean;
+	columnId: ID;
 };
 
-const Column = ({title, cards, columnIndex, isFocused}: ColumnProps) => {
+const Column = ({columnId}: ColumnProps) => {
 	const theme = useTheme();
+	const {board} = useApp();
 	const {stdout} = useStdout();
 	const {focusState, cardsPerColumn} = useFocus();
 	const {HEADER_HEIGHT, FOOTER_HEIGHT, CARD_HEIGHT} = LAYOUT;
@@ -23,6 +21,11 @@ const Column = ({title, cards, columnIndex, isFocused}: ColumnProps) => {
 	const [bodyHeight, setBodyHeight] = useState(
 		stdout.rows - HEADER_HEIGHT - FOOTER_HEIGHT,
 	);
+
+	const columnIndex = board.columns.findIndex(col => col.id === columnId);
+	const isFocused = columnIndex === focusState.active.columnIndex;
+	const column = board.columns.find(col => col.id === columnId);
+	const cards = board.cards.filter(card => card.columnId === columnId);
 
 	const activeCardIndex = focusState.active.cardIndex;
 	const visibleCardsPerColumn = Math.floor(bodyHeight / CARD_HEIGHT);
@@ -84,7 +87,7 @@ const Column = ({title, cards, columnIndex, isFocused}: ColumnProps) => {
 		>
 			{/* Header */}
 			<Box height={HEADER_HEIGHT} justifyContent="center" alignItems="center">
-				<Text color={color}>{title}</Text>
+				<Text color={color}>{column!.name}</Text>
 			</Box>
 			{/* Kanban cards */}
 			<Box flexDirection="column" flexGrow={1} paddingTop={0} paddingBottom={0}>
