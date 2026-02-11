@@ -14,8 +14,7 @@ type AppContextValue = InkInstance & {
 };
 
 type ProviderProps = {
-	context: {
-		env: InkInstance;
+	context: InkInstance & {
 		theme: Theme;
 		boardId?: string;
 		kanbanService: KanbanService;
@@ -65,7 +64,7 @@ export const AppProvider = ({context, children}: ProviderProps) => {
 		: [];
 
 	const value: AppContextValue = {
-		...context.env,
+		...context,
 		theme: context.theme,
 		board,
 		setBoard,

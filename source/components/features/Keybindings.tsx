@@ -12,7 +12,7 @@ const Keybindings = () => {
 	const theme = useTheme();
 	const {nextColumn, prevColumn, nextCard, prevCard, expandCard} = useFocus();
 	const {addStatement} = useDebug();
-	const {clear, unmount} = useApp();
+	const app = useApp();
 
 	const displayedCommands = COMMANDS.filter(command => command.display);
 
@@ -31,8 +31,8 @@ const Keybindings = () => {
 		if (cmd) {
 			switch (cmd.action) {
 				case FOCUS_ACTION.QUIT:
-					clear();
-					unmount();
+					app.clear();
+					app.unmount();
 					break;
 				case FOCUS_ACTION.NEXT_COL:
 					nextColumn();
