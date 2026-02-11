@@ -1,8 +1,8 @@
-# boardctl
+# Lazyban
 
 *Lazygit for work tracking - one board, any backend.*
 
-**boardctl** is a terminal-first kanban board designed to be your universal command center for all things kanban. Whether you’re working in Jira, Zenhub, or even a local kanban configuration, boardctl gives you a consistent, keyboard-driven workflow - no mouse, no context switching.
+**Lazyban** is a terminal-first kanban board designed to be your universal command center for all things kanban. Whether you’re working in Jira, Zenhub, or even a local kanban configuration, Lazyban gives you a consistent, keyboard-driven workflow - no mouse, no context switching.
 
 ![boardctl MVP - Terminal kanban board](.github/assets/boardctl-mvp.png
 
@@ -31,7 +31,7 @@
 
 ## Philosophy
 
-Inspired by tools like **lazygit** and **k9s**, boardctl brings the same terminal-first philosophy to kanban workflows:
+Inspired by tools like **lazygit** and **k9s**, Lazyban brings the same terminal-first philosophy to kanban workflows:
 - **Fast:** Keyboard-driven, zero mouse dependency
 - **Focused:** One interface, no browser tabs
 - **Flexible:** Works with your existing tools via content strategies
@@ -42,17 +42,14 @@ Currently in development. To try the latest:
 
 ```sh
 pnpm install
-pnpm run start      # Launch boardctl
+pnpm run start      # Launch Lazyban
 pnpm run dev        # Watch mode for development
 pnpm run debug      # Debug mode with console outp
-
-```bash
-$ npm install --global boardctl
 ```
 
 ## Architecture
 
-boardctl uses a **Strategy Pattern** to support multiple kanban backends through a unified interface:
+Lazy uses a **Strategy Pattern** to support multiple kanban backends through a unified interface:
 
 ```mermaid
 classDiagram
@@ -69,7 +66,7 @@ classDiagram
         +get(name: string): KanbanStrategy
     }
 
-    %% Context
+    %% Service (Strategy Context)
     class KanbanService {
         -strategy: KanbanStrategy
         +setStrategy(strategy: KanbanStrategy): void
@@ -139,7 +136,7 @@ Each content strategy implements the same interface, allowing you to switch back
 
 ## Contributing
 
-Not accepting contributions during MVP development, but feedback and feature suggestions are welcome via [Issues](https://github.com/kuhlekt1v/boardctl/issues)!
+Not accepting contributions during MVP development, but feedback and feature suggestions are welcome via [Issues](https://github.com/kuhlekt1v/lazyban/issues)!
 
 ## License
 
