@@ -10,6 +10,7 @@ type AppContextValue = InkInstance & {
 	setBoard: (board: Board) => void;
 	status: 'loading' | 'show' | 'error';
 	kanbanService: KanbanService;
+	cardsPerColumn: number[];
 };
 
 type ProviderProps = {
@@ -54,6 +55,15 @@ export const AppProvider = ({context, children}: ProviderProps) => {
 		return <>{/* Render error UI here */}</>;
 	}
 
+	const cardsPerColumn = board
+		? board.columns.map(
+				column =>
+					board.cards.filter(
+						card => card.columnId === column.name.toLowerCase(),
+					).length,
+		  )
+		: [];
+
 	const value: AppContextValue = {
 		...context.env,
 		theme: context.theme,
@@ -61,6 +71,7 @@ export const AppProvider = ({context, children}: ProviderProps) => {
 		setBoard,
 		status,
 		kanbanService: context.kanbanService,
+		cardsPerColumn,
 	};
 
 	return (

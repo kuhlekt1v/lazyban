@@ -1,5 +1,5 @@
 import {render} from 'ink';
-import App from './app.js';
+import App from './App.js';
 import {bootstrap} from './bootstrap.js';
 import {DebugProvider} from './context/DebugContext.js';
 import {FocusProvider} from './context/FocusContext.js';
@@ -22,11 +22,11 @@ const ink = render(<div />);
 
 render(
 	// @ts-ignore
-	<AppProvider context={{...ink, theme, kanbanService}}>
-		<DebugProvider context={debug}>
+	<DebugProvider context={debug}>
+		<AppProvider context={{...ink, theme, kanbanService}}>
 			<FocusProvider>
 				<App context={context} />
 			</FocusProvider>
-		</DebugProvider>
-	</AppProvider>,
+		</AppProvider>
+	</DebugProvider>,
 );

@@ -1,4 +1,4 @@
-import React, {
+import {
 	ReactNode,
 	useContext,
 	useReducer,
@@ -7,6 +7,7 @@ import React, {
 } from 'react';
 import {LAYOUT} from '../constants.js';
 import {FOCUS_ACTION} from './focusActions.js';
+import {useApp} from './AppContext.js';
 
 export const OVERLAY_TYPE = {
 	DETAIL: 'DETAIL',
@@ -56,7 +57,6 @@ interface FocusContextValue {
 	nextCard: () => void;
 	prevCard: () => void;
 	expandCard: () => void;
-	setCardsPerColumn: (cards: number[]) => void;
 	closeOverlay: (type: keyof typeof OVERLAY_TYPE) => void;
 }
 
@@ -147,7 +147,6 @@ const reducer = (state: FocusState, action: Action): FocusState => {
 const FocusContext = createContext<FocusContextValue>({
 	focusState: initialState,
 	cardsPerColumn: [],
-	setCardsPerColumn: (_cards: number[]) => {},
 	nextColumn: () => {},
 	prevColumn: () => {},
 	nextCard: () => {},
@@ -157,8 +156,8 @@ const FocusContext = createContext<FocusContextValue>({
 });
 
 export const FocusProvider = ({children}: {children: ReactNode}) => {
+	const {cardsPerColumn} = useApp();
 	const [focusState, dispatch] = useReducer(reducer, initialState);
-	const [cardsPerColumn, setCardsPerColumn] = useState([]);
 
 	const nextColumn = () => {
 		const nextCol = wrap(
@@ -211,7 +210,6 @@ export const FocusProvider = ({children}: {children: ReactNode}) => {
 			value={{
 				focusState,
 				cardsPerColumn,
-				setCardsPerColumn,
 				nextColumn,
 				prevColumn,
 				nextCard,
