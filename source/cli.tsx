@@ -1,5 +1,5 @@
 import React from 'react';
-import {render} from 'ink';
+import {render, Box} from 'ink';
 import {Text} from 'ink';
 import App from './app.js';
 import {bootstrap} from './bootstrap.js';
@@ -17,7 +17,7 @@ const boardExists = checkBoardDirectory();
 if (!boardExists) {
 	// Show onboarding flow
 	// @ts-ignore
-	const ink = render(<div />);
+	const ink = render(<Box />);
 
 	render(
 		// @ts-ignore
@@ -57,7 +57,7 @@ if (!boardExists) {
 	// Normal app flow
 	const context = bootstrap();
 	// @ts-ignore
-	const ink = render(<div />);
+	const ink = render(<Box />);
 
 	render(
 		// @ts-ignore

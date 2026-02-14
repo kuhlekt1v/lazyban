@@ -1,5 +1,5 @@
 // context/AppEnvContext.tsx
-import {createContext, useContext} from 'react';
+import React, {createContext, useContext} from 'react';
 
 export type AppEnv = {
 	clear: () => void;
