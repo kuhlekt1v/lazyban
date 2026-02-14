@@ -24,19 +24,11 @@ export const TextInput = ({
 				onCancel();
 			}
 		} else if (key.backspace || key.delete) {
-			setValue(prev => {
-				if (prev.length === 0) {
-					// If already empty, don't prevent further backspace
-					return '';
-				}
-				return prev.slice(0, -1);
-			});
+			setValue(prev => prev.slice(0, -1));
 		} else if (!key.ctrl && !key.meta && input) {
 			setValue(prev => prev + input);
 		}
 	});
-
-	const displayValue = value.length > 0 ? value : defaultValue;
 
 	return (
 		// @ts-ignore
