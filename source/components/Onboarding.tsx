@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {Box, Text} from 'ink';
 import path from 'node:path';
 import {ConfirmPrompt} from './ConfirmPrompt.js';
@@ -16,7 +16,8 @@ type OnboardingStep =
 	| 'boardName'
 	| 'provider'
 	| 'theme'
-	| 'complete';
+	| 'complete'
+	| 'error';
 
 type Props = {
 	onComplete: () => void;
@@ -27,6 +28,16 @@ export const Onboarding = ({onComplete, onCancel}: Props) => {
 	const [step, setStep] = useState<OnboardingStep>('confirm');
 	const [boardName, setBoardName] = useState(path.basename(process.cwd()));
 	const [provider, setProvider] = useState('local');
+	const [errorMessage, setErrorMessage] = useState('');
+	const completionTimerRef = useRef<NodeJS.Timeout>();
+
+	useEffect(() => {
+		return () => {
+			if (completionTimerRef.current) {
+				clearTimeout(completionTimerRef.current);
+			}
+		};
+	}, []);
 
 	const handleConfirm = (confirmed: boolean) => {
 		if (confirmed) {
@@ -55,24 +66,27 @@ export const Onboarding = ({onComplete, onCancel}: Props) => {
 			const config: BoardConfig = {
 				provider,
 				theme: selectedTheme,
+				name: boardName,
 			};
 			createConfigFile(config);
 
 			// Create board.yaml if provider is local
 			if (provider === 'local') {
-				createBoardFile();
+				createBoardFile(boardName);
 			}
 
 			setStep('complete');
 
 			// Automatically transition to main app after showing success message
-			setTimeout(() => {
+			completionTimerRef.current = setTimeout(() => {
 				onComplete();
 			}, 1500);
 		} catch (error) {
 			// Handle errors gracefully
-			console.error('Failed to initialize .board directory:', error);
-			onCancel();
+			const message =
+				error instanceof Error ? error.message : 'Unknown error occurred';
+			setErrorMessage(`Failed to initialize .board directory: ${message}`);
+			setStep('error');
 		}
 	};
 
@@ -134,6 +148,23 @@ export const Onboarding = ({onComplete, onCancel}: Props) => {
 				<Text color="green">
 					✓ Your .board directory has been initialized successfully!
 				</Text>
+			</Box>
+		);
+	}
+
+	if (step === 'error') {
+		return (
+			// @ts-ignore
+			<Box flexDirection="column">
+				<Text color="red">✗ Error during initialization</Text>
+				{/* @ts-ignore */}
+				<Box marginTop={1}>
+					<Text>{errorMessage}</Text>
+				</Box>
+				{/* @ts-ignore */}
+				<Box marginTop={1}>
+					<Text dimColor>Press any key to exit...</Text>
+				</Box>
 			</Box>
 		);
 	}

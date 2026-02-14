@@ -1,5 +1,5 @@
 // context/AppEnvContext.tsx
-import React, {createContext, useContext} from 'react';
+import {createContext, useContext} from 'react';
 
 export type AppEnv = {
 	clear: () => void;
@@ -8,13 +8,12 @@ export type AppEnv = {
 
 const AppEnvContext = createContext<AppEnv | null>(null);
 
-export const AppEnvProvider = ({
-	env,
-	children,
-}: {
+type AppEnvProviderProps = {
 	env: AppEnv;
 	children: React.ReactNode;
-}) => (
+};
+
+export const AppEnvProvider = ({env, children}: AppEnvProviderProps) => (
 	// @ts-ignore
 	<AppEnvContext.Provider value={env}>{children}</AppEnvContext.Provider>
 );

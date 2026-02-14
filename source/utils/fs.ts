@@ -9,6 +9,21 @@ const BOARD_FILE = 'board.yaml';
 export interface BoardConfig {
 	provider: string;
 	theme: string;
+	name?: string;
+}
+
+export interface BoardData {
+	name: string;
+	columns: Array<{
+		id: string;
+		title: string;
+		cardIds: string[];
+	}>;
+	cards: Array<{
+		id: string;
+		title: string;
+		description: string;
+	}>;
 }
 
 /**
@@ -40,13 +55,20 @@ export function createConfigFile(config: BoardConfig): void {
 }
 
 /**
- * Create an empty board.yaml file
+ * Create an empty board.yaml file with the board name
  */
-export function createBoardFile(): void {
+export function createBoardFile(boardName: string): void {
 	const boardPath = path.join(process.cwd(), BOARD_DIR);
 	const boardFilePath = path.join(boardPath, BOARD_FILE);
-	// Create an empty file or with minimal structure
-	fs.writeFileSync(boardFilePath, '', 'utf8');
+
+	const boardData: BoardData = {
+		name: boardName,
+		columns: [],
+		cards: [],
+	};
+
+	const yamlContent = yaml.dump(boardData);
+	fs.writeFileSync(boardFilePath, yamlContent, 'utf8');
 }
 
 /**
@@ -62,8 +84,19 @@ export function readConfigFile(): BoardConfig | null {
 
 	try {
 		const fileContent = fs.readFileSync(configPath, 'utf8');
-		const config = yaml.load(fileContent) as BoardConfig;
-		return config;
+		const config = yaml.load(fileContent);
+
+		// Validate config structure
+		if (
+			typeof config === 'object' &&
+			config !== null &&
+			'provider' in config &&
+			'theme' in config
+		) {
+			return config as BoardConfig;
+		}
+
+		return null;
 	} catch {
 		return null;
 	}

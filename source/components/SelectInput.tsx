@@ -34,7 +34,10 @@ export const SelectInput = ({
 		} else if (key.downArrow || input === 'j') {
 			setSelectedIndex(prev => (prev < options.length - 1 ? prev + 1 : 0));
 		} else if (key.return) {
-			onSelect(options[selectedIndex]!.value);
+			const selectedOption = options[selectedIndex];
+			if (selectedOption) {
+				onSelect(selectedOption.value);
+			}
 		} else if (key.escape) {
 			if (onCancel) {
 				onCancel();
