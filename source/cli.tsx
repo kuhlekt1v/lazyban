@@ -1,25 +1,72 @@
 import React from 'react';
 import {render} from 'ink';
+import {Text} from 'ink';
 import App from './app.js';
 import {bootstrap} from './bootstrap.js';
 import {AppEnvProvider} from './context/AppEnvContext.js';
 import {DebugProvider} from './context/DebugContext.js';
 import {FocusProvider} from './context/FocusContext.js';
+import {checkBoardDirectory} from './utils/fs.js';
+import {Onboarding} from './components/Onboarding.js';
 
-const config = {provider: 'local'};
-const context = bootstrap(config);
 const debug: boolean = process.env?.['DEBUG'] === '1';
 
-// @ts-ignore
-const ink = render(<div />);
+// Check if .board directory exists
+const boardExists = checkBoardDirectory();
 
-render(
+if (!boardExists) {
+	// Show onboarding flow
 	// @ts-ignore
-	<AppEnvProvider env={ink}>
-		<DebugProvider debug={debug}>
-			<FocusProvider>
-				<App context={context} />
-			</FocusProvider>
-		</DebugProvider>
-	</AppEnvProvider>,
-);
+	const ink = render(<div />);
+
+	render(
+		// @ts-ignore
+		<AppEnvProvider env={ink}>
+			<Onboarding
+				onComplete={() => {
+					// After onboarding completes, relaunch with main app
+					const context = bootstrap();
+					render(
+						// @ts-ignore
+						<AppEnvProvider env={ink}>
+							<DebugProvider debug={debug}>
+								<FocusProvider>
+									<App context={context} />
+								</FocusProvider>
+							</DebugProvider>
+						</AppEnvProvider>,
+					);
+				}}
+				onCancel={() => {
+					// @ts-ignore
+					console.log('\n');
+					// @ts-ignore
+					render(
+						<Text color="yellow">
+							⚠ You need a .board directory to continue.
+						</Text>,
+					);
+					setTimeout(() => {
+						process.exit(0);
+					}, 1000);
+				}}
+			/>
+		</AppEnvProvider>,
+	);
+} else {
+	// Normal app flow
+	const context = bootstrap();
+	// @ts-ignore
+	const ink = render(<div />);
+
+	render(
+		// @ts-ignore
+		<AppEnvProvider env={ink}>
+			<DebugProvider debug={debug}>
+				<FocusProvider>
+					<App context={context} />
+				</FocusProvider>
+			</DebugProvider>
+		</AppEnvProvider>,
+	);
+}
