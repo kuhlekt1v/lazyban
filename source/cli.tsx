@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {render, Box, Text} from 'ink';
 import App from './app.js';
 import {bootstrap} from './bootstrap.js';
