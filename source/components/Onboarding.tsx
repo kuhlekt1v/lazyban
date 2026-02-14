@@ -47,8 +47,6 @@ export const Onboarding = ({onComplete, onCancel}: Props) => {
 	};
 
 	const handleTheme = (selectedTheme: string) => {
-		setTheme(selectedTheme);
-
 		try {
 			// Create .board directory
 			createBoardDirectory();

@@ -38,7 +38,6 @@ if (!boardExists) {
 					);
 				}}
 				onCancel={() => {
-					// @ts-ignore
 					console.log('\n');
 					// @ts-ignore
 					render(
