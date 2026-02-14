@@ -1,5 +1,5 @@
 import {Box} from './index.js';
-import {useInput} from 'ink';
+import {useFocusManager, useInput} from 'ink';
 import {useTheme} from '../../context/AppContext.js';
 import {OVERLAY_TYPE, useFocus} from '../../context/FocusContext.js';
 import {ReactNode} from 'react';
@@ -13,10 +13,12 @@ const Overlay = ({height = 50, width = 50, children}: OverlayProps) => {
 	const theme = useTheme();
 	const heightPercent = `${height}%`;
 	const widthPercent = `${width}%`;
+	const {focus} = useFocusManager();
 	const {closeOverlay} = useFocus();
 
 	useInput((_, key) => {
 		if (key.escape) {
+			focus('board');
 			closeOverlay(OVERLAY_TYPE.DETAIL);
 		}
 	});

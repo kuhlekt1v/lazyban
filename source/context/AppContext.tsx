@@ -1,7 +1,7 @@
 import {createContext, ReactNode, useContext, useEffect, useState} from 'react';
 import {Theme} from '../core/theme.js';
 import {Instance as InkInstance} from 'ink';
-import {Board} from '../core/models.js';
+import {Board, Card, ID} from '../core/models.js';
 import {KanbanService} from '../core/KanbanService.js';
 
 type AppContextValue = InkInstance & {
@@ -11,6 +11,7 @@ type AppContextValue = InkInstance & {
 	status: 'loading' | 'show' | 'error';
 	kanbanService: KanbanService;
 	cardsPerColumn: number[];
+	getCardById: (id: ID) => Card | undefined;
 };
 
 type ProviderProps = {
@@ -71,6 +72,7 @@ export const AppProvider = ({context, children}: ProviderProps) => {
 		status,
 		kanbanService: context.kanbanService,
 		cardsPerColumn,
+		getCardById: (id: ID) => board.cards.find(card => card.id === id),
 	};
 
 	return (

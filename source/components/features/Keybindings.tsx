@@ -1,4 +1,4 @@
-import {Box, Text, useInput} from 'ink';
+import {Box, Text, useFocusManager, useInput} from 'ink';
 
 import {Command} from '../../core/models.js';
 import {COMMANDS} from '../../constants.js';
@@ -13,6 +13,7 @@ const Keybindings = () => {
 	const {nextColumn, prevColumn, nextCard, prevCard, expandCard} = useFocus();
 	const {addStatement} = useDebug();
 	const app = useApp();
+	const {focus} = useFocusManager();
 
 	const displayedCommands = COMMANDS.filter(command => command.display);
 
@@ -50,7 +51,9 @@ const Keybindings = () => {
 					break;
 
 				case FOCUS_ACTION.EXPAND_CARD:
-					expandCard();
+					expandCard(app.board);
+					focus('overlay');
+
 					break;
 
 				default:

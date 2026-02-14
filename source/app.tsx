@@ -20,9 +20,9 @@ export default function App() {
 				height="100%"
 				backgroundColor={theme.PRIMARY_BACKGROUND}
 			>
-				<Board />
+				<Board id="board" />
 				{focusState.cardDetailOpen && (
-					<Overlay>
+					<Overlay id="overlay">
 						<CardDetails />
 					</Overlay>
 				)}
