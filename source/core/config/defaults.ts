@@ -1,9 +1,7 @@
-export type BoardConfig = {
-	provider: 'local' | 'jira';
-	theme: 'light' | 'dark';
-};
+import {BoardConfig} from '../models.js';
 
 export const DEFAULT_CONFIG: BoardConfig = {
 	provider: 'local',
 	theme: 'dark',
+	name: 'lazyban',
 };

@@ -33,6 +33,7 @@ export const AppProvider = ({context, children}: ProviderProps) => {
 		/* TODO: Support multiple boards and selection flow
 		 * TODO: Replace hardcoded 'board-1' with proper board
 		 *       initialization/selection flow after development
+		 * TODO: Gracefull handle errors
 		 */
 		const loadBoard = async () => {
 			try {
@@ -41,7 +42,8 @@ export const AppProvider = ({context, children}: ProviderProps) => {
 				);
 				setBoard(b);
 				setStatus('show');
-			} catch (e) {
+			} catch (e: any) {
+				console.error(e.message);
 				setStatus('error');
 			}
 		};

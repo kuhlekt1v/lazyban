@@ -1,7 +1,8 @@
 import fs from 'fs';
 import path from 'path';
+import {BoardConfig} from '../models.js';
 
-import {DEFAULT_CONFIG, type BoardConfig} from './defaults.js';
+import {DEFAULT_CONFIG} from './defaults.js';
 
 export function loadConfig(): BoardConfig {
 	const configPath = path.join(process.cwd(), '.board', 'config.json');

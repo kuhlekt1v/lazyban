@@ -1,32 +1,67 @@
-import {render} from 'ink';
+import {Box, render, Text} from 'ink';
 import App from './App.js';
 import {bootstrap} from './bootstrap.js';
 import {DebugProvider} from './context/DebugContext.js';
 import {FocusProvider} from './context/FocusContext.js';
-import {loadConfig} from './core/config/loadConfig.js';
 import {themes} from './core/theme.js';
 import {AppProvider} from './context/AppContext.js';
+import {checkBoardDirectory, readConfigFile} from './core/config/fs.js';
+import {useEffect, useState} from 'react';
+import Onboarding from './components/features/Onboarding.js';
 
-// Loads from .board directory if it exists
-const config = loadConfig();
-/* TODO: If .board does not exist, trigger initialization flow
- *       to create config and select provider.
- */
-const kanbanService = bootstrap(config);
-const context = bootstrap(config);
 const debug: boolean = process.env?.['DEBUG'] === '1';
-const theme = themes[config.theme] ?? themes['dark'];
 
 // @ts-ignore
 const ink = render(<div />);
 
-render(
+const AppWraper = () => {
+	const [showOnboarding, setShowOnboarding] = useState(!checkBoardDirectory());
+	const [showWarning, setShowWarning] = useState(false);
+
+	useEffect(() => {
+		if (showWarning) {
+			const timer = setTimeout(() => {
+				process.exit(0);
+			}, 1000);
+			return () => clearTimeout(timer);
+		}
+
+		return undefined;
+	}, [showWarning]);
+
+	if (showWarning) {
+		return (
+			// @ts-ignore
+			<Box marginTop={1}>
+				<Text color="yellow">⚠ You need a .board directory to continue.</Text>
+			</Box>
+		);
+	}
+
+	if (showOnboarding) {
+		return (
+			<Onboarding
+				onComplete={() => setShowOnboarding(false)}
+				onCancel={() => setShowWarning(true)}
+			/>
+		);
+	}
+
+	const config = readConfigFile();
+	const kanbanService = bootstrap(config);
+	const theme = themes[config.theme] ?? themes['dark'];
+
 	// @ts-ignore
-	<DebugProvider context={debug}>
-		<AppProvider context={{...ink, theme, kanbanService}}>
-			<FocusProvider>
-				<App context={context} />
-			</FocusProvider>
-		</AppProvider>
-	</DebugProvider>,
-);
+	return (
+		<DebugProvider context={debug}>
+			<AppProvider context={{...ink, theme, kanbanService}}>
+				<FocusProvider>
+					<App />
+				</FocusProvider>
+			</AppProvider>
+		</DebugProvider>
+	);
+};
+
+// @ts-ignore
+render(<AppWraper />);
