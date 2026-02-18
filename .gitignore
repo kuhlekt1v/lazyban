@@ -32,3 +32,6 @@ yarn-error.log*
 # Coverage
 coverage/ode_modules
 dist
+
+# Board
+.board/
