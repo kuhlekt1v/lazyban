@@ -2,11 +2,12 @@ import fs from 'node:fs';
 import path from 'node:path';
 import yaml from 'js-yaml';
 import {BoardConfig} from '../models.js';
-import {DEFAULT_CONFIG} from './defaults.js';
-
-const BOARD_DIR = '.board';
-const CONFIG_FILE = 'config.yaml';
-const BOARD_FILE = 'board.yaml';
+import {
+	BOARD_DIR,
+	CONFIG_FILE,
+	BOARD_FILE,
+	DEFAULT_CONFIG,
+} from './defaults.js';
 
 /*
  * Check if the .board directory exists in the
@@ -53,30 +54,31 @@ export function createBoardFile(boardName: string): void {
 	};
 
 	const boardData = {
+		id: 'local',
 		name: boardName,
 		columns: [],
 		cards: [sampleCard],
 	};
 
 	const comments = `
-  ########## Card Structure ##########
+	########## Card Structure ##########
   #
-	#id: "string"            # required
-	#title: "string"         # required
-	#columnId: "string"      # required
-	#description: "string"   # optional
-	#assignee: "string"      # optional
-	#labels: []              # optional (array of strings)
-	#priority: "low"         # optional (low | medium | high)
-	#feature: "string"       # optional
-	#points: 0               # optional (number)
-	#
-  ###################################
-
+	# - id:          (required) unique-card-id
+	#   title:       (required) Card title
+	#   columnId:    (required) todo|doing|blocked|done
+	#   description: Card description
+  #   assignee:    Person who story is assigned to
+  #   labels:      List of labels
+	#   priority:    low|medium|high
+	#   feature:     Feature name
+	#   points:      number
+  #
+	####################################
 `;
 
-	const yamlContent = yaml.dump(boardData.cards[0]);
-	fs.writeFileSync(boardFilePath, comments + yamlContent, 'utf8');
+	const cardsArrayYaml = yaml.dump([sampleCard], {lineWidth: 120});
+
+	fs.writeFileSync(boardFilePath, comments + '\n' + cardsArrayYaml, 'utf8');
 }
 
 // Read the configuration from config.yaml
