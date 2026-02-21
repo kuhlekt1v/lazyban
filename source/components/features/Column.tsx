@@ -1,19 +1,19 @@
 import React, {useState, useEffect} from 'react';
 import {Text, useStdout} from 'ink';
-import {COLOR, LAYOUT} from '../constants.js';
+import {LAYOUT} from '../../constants.js';
 import Card from './Card.js';
-import {Card as ICard} from '../core/models.js';
-import Box from './Box.js';
-import {useFocus} from '../context/FocusContext.js';
+import {Column, Card as ICard, ID} from '../../core/models.js';
+import {Box} from '../shared/index.js';
+import {useFocus} from '../../context/FocusContext.js';
+import {useApp, useTheme} from '../../context/AppContext.js';
 
 type ColumnProps = {
-	title: string;
-	cards: ICard[];
-	columnIndex: number;
-	isFocused: boolean;
+	columnId: ID;
 };
 
-const Column = ({title, cards, columnIndex, isFocused}: ColumnProps) => {
+const Column = ({columnId}: ColumnProps) => {
+	const theme = useTheme();
+	const {board} = useApp();
 	const {stdout} = useStdout();
 	const {focusState, cardsPerColumn} = useFocus();
 	const {HEADER_HEIGHT, FOOTER_HEIGHT, CARD_HEIGHT} = LAYOUT;
@@ -22,10 +22,15 @@ const Column = ({title, cards, columnIndex, isFocused}: ColumnProps) => {
 		stdout.rows - HEADER_HEIGHT - FOOTER_HEIGHT,
 	);
 
+	const columnIndex = board.columns.findIndex(col => col.id === columnId);
+	const isFocused = columnIndex === focusState.active.columnIndex;
+	const column = board.columns.find(col => col.id === columnId);
+	const cards = board.cards.filter(card => card.columnId === columnId);
+
 	const activeCardIndex = focusState.active.cardIndex;
 	const visibleCardsPerColumn = Math.floor(bodyHeight / CARD_HEIGHT);
 	const startIndex = isFocused
-		? Math.floor(activeCardIndex / visibleCardsPerColumn) *
+		? Math.floor(activeCardIndex! / visibleCardsPerColumn) *
 		  visibleCardsPerColumn
 		: 0;
 
@@ -34,7 +39,7 @@ const Column = ({title, cards, columnIndex, isFocused}: ColumnProps) => {
 		startIndex + visibleCardsPerColumn,
 	);
 
-	const color = isFocused ? COLOR.PRIMARY : COLOR.SECONDARY;
+	const color = isFocused ? theme.PRIMARY : theme.SECONDARY;
 
 	/* Dynamically resize column body if terminal
 	 * manually resized (e.g. user click & drag).
@@ -53,19 +58,24 @@ const Column = ({title, cards, columnIndex, isFocused}: ColumnProps) => {
 
 	const totalCards = cardsPerColumn[columnIndex] ?? 0;
 
-	const firstVisible = isFocused ? focusState.active.cardIndex + 1 : 1;
+	const firstVisible = isFocused ? focusState.active.cardIndex! + 1 : 1;
 
 	const lastVisible = Math.min(
 		startIndex + visibleCardsPerColumn,
 		cards.length,
 	);
 
-	const footerText =
-		cards.length > 0
-			? isFocused
-				? `${firstVisible}-${lastVisible} of ${totalCards}`
-				: `1-${Math.min(visibleCardsPerColumn, cards.length)} of ${totalCards}`
-			: '';
+	let footerText: string;
+	if (cards.length === 0) {
+		footerText = '0-0 of 0';
+	} else if (isFocused) {
+		footerText = `${firstVisible}-${lastVisible} of ${totalCards}`;
+	} else {
+		footerText = `1-${Math.min(
+			visibleCardsPerColumn,
+			cards.length,
+		)} of ${totalCards}`;
+	}
 
 	return (
 		<Box
@@ -77,7 +87,7 @@ const Column = ({title, cards, columnIndex, isFocused}: ColumnProps) => {
 		>
 			{/* Header */}
 			<Box height={HEADER_HEIGHT} justifyContent="center" alignItems="center">
-				<Text color={color}>{title}</Text>
+				<Text color={color}>{column!.name}</Text>
 			</Box>
 			{/* Kanban cards */}
 			<Box flexDirection="column" flexGrow={1} paddingTop={0} paddingBottom={0}>
@@ -96,7 +106,7 @@ const Column = ({title, cards, columnIndex, isFocused}: ColumnProps) => {
 
 			{/* Footer */}
 			<Box justifyContent="center" height={FOOTER_HEIGHT}>
-				<Text color={COLOR.SECONDARY_DIM} dimColor>
+				<Text color={theme.SECONDARY_DIM} dimColor>
 					{footerText}
 				</Text>
 			</Box>

@@ -1,25 +1,23 @@
-import React, {
-	ReactNode,
-	useContext,
-	useReducer,
-	createContext,
-	useState,
-} from 'react';
+import {ReactNode, useContext, useReducer, createContext} from 'react';
 import {LAYOUT} from '../constants.js';
-import {useDebug} from './DebugContext.js';
+import {FOCUS_ACTION} from './focusActions.js';
+import {useApp} from './AppContext.js';
+import {Board, ID} from '../core/models.js';
 
-export const FOCUS_ACTION = {
-	NEXT_COL: 'NEXT_COL',
-	PREV_COL: 'PREV_COL',
-	NEXT_CARD: 'NEXT_CARD',
-	PREV_CARD: 'PREV_CARD',
-	QUIT: 'QUIT',
-	KEYBINDINGS: 'KEYBINDINGS',
+export const OVERLAY_TYPE = {
+	DETAIL: 'DETAIL',
+	HELP: 'HELP',
 } as const;
 
 type Action =
-	| {type: typeof FOCUS_ACTION.NEXT_COL}
-	| {type: typeof FOCUS_ACTION.PREV_COL}
+	| {
+			type: typeof FOCUS_ACTION.NEXT_COL;
+			payload: {cardsInCol: number | undefined};
+	  }
+	| {
+			type: typeof FOCUS_ACTION.PREV_COL;
+			payload: {cardsInCol: number | undefined};
+	  }
 	| {
 			type: typeof FOCUS_ACTION.NEXT_CARD;
 			payload: {cardsInCol: number | undefined};
@@ -27,27 +25,41 @@ type Action =
 	| {
 			type: typeof FOCUS_ACTION.PREV_CARD;
 			payload: {cardsInCol: number | undefined};
+	  }
+	| {
+			type: typeof FOCUS_ACTION.EXPAND_CARD;
+			payload: {cardId: ID};
+	  }
+	| {
+			type: typeof FOCUS_ACTION.CLOSE_OVERLAY;
+			payload: {overlay: keyof typeof OVERLAY_TYPE};
 	  };
 
 export interface FocusState {
 	active: {
+		cardId: ID | undefined;
 		columnIndex: number;
-		cardIndex: number;
+		cardIndex: number | undefined;
 	};
+	cardDetailOpen: boolean;
+	helpMenuOpen: boolean;
 }
 
 interface FocusContextValue {
 	focusState: FocusState;
 	cardsPerColumn: number[];
-	setCardsPerColumn: (cards: number[]) => void;
 	nextColumn: () => void;
 	prevColumn: () => void;
 	nextCard: () => void;
 	prevCard: () => void;
+	expandCard: (cardId: Board) => void;
+	closeOverlay: (type: keyof typeof OVERLAY_TYPE) => void;
 }
 
 const initialState: FocusState = {
-	active: {columnIndex: 0, cardIndex: 0},
+	active: {columnIndex: 0, cardIndex: 0, cardId: undefined},
+	cardDetailOpen: false,
+	helpMenuOpen: false,
 };
 function wrap(index: number, count: number) {
 	if (count <= 0) return 0;
@@ -55,28 +67,26 @@ function wrap(index: number, count: number) {
 }
 
 const reducer = (state: FocusState, action: Action): FocusState => {
-	const {addStatement} = useDebug();
-
 	switch (action.type) {
 		case FOCUS_ACTION.NEXT_COL: {
-			const nextCol = wrap(state.active.columnIndex + 1, LAYOUT.TOTAL_COLUMN);
-
+			const cardsInCol = action.payload.cardsInCol ?? 0;
 			return {
 				...state,
 				active: {
-					columnIndex: nextCol,
-					cardIndex: 0,
+					...state.active,
+					columnIndex: wrap(state.active.columnIndex + 1, LAYOUT.TOTAL_COLUMN),
+					cardIndex: cardsInCol > 0 ? 0 : undefined,
 				},
 			};
 		}
 		case FOCUS_ACTION.PREV_COL: {
-			const prevCol = wrap(state.active.columnIndex - 1, LAYOUT.TOTAL_COLUMN);
-
+			const cardsInCol = action.payload.cardsInCol ?? 0;
 			return {
 				...state,
 				active: {
-					columnIndex: prevCol,
-					cardIndex: 0,
+					...state.active,
+					columnIndex: wrap(state.active.columnIndex - 1, LAYOUT.TOTAL_COLUMN),
+					cardIndex: cardsInCol > 0 ? 0 : undefined,
 				},
 			};
 		}
@@ -88,8 +98,7 @@ const reducer = (state: FocusState, action: Action): FocusState => {
 				...state,
 				active: {
 					...state.active,
-
-					cardIndex: (state.active.cardIndex - 1 + cardsInCol) % cardsInCol,
+					cardIndex: (state.active.cardIndex! - 1 + cardsInCol) % cardsInCol,
 				},
 			};
 		}
@@ -97,18 +106,34 @@ const reducer = (state: FocusState, action: Action): FocusState => {
 			const cardsInCol = action.payload.cardsInCol ?? 0;
 
 			if (cardsInCol === 0) return state;
-
-			addStatement(
-				'activeCardIndex',
-				((state.active.cardIndex + 1) % cardsInCol) as unknown as string,
-			);
 			return {
 				...state,
 				active: {
 					...state.active,
-					cardIndex: (state.active.cardIndex + 1) % cardsInCol,
+					cardIndex: (state.active.cardIndex! + 1) % cardsInCol,
 				},
 			};
+		}
+		case FOCUS_ACTION.EXPAND_CARD: {
+			return {
+				...state,
+				active: {
+					...state.active,
+					cardId: action.payload.cardId,
+				},
+				cardDetailOpen: true,
+			};
+		}
+
+		case FOCUS_ACTION.CLOSE_OVERLAY: {
+			const {overlay} = action.payload;
+			if (overlay === 'DETAIL') {
+				return {...state, cardDetailOpen: false};
+			}
+			if (overlay === 'HELP') {
+				return {...state, helpMenuOpen: false};
+			}
+			return state;
 		}
 
 		default:
@@ -119,28 +144,71 @@ const reducer = (state: FocusState, action: Action): FocusState => {
 const FocusContext = createContext<FocusContextValue>({
 	focusState: initialState,
 	cardsPerColumn: [],
-	setCardsPerColumn: (_cards: number[]) => {},
 	nextColumn: () => {},
 	prevColumn: () => {},
 	nextCard: () => {},
 	prevCard: () => {},
+	expandCard: () => {},
+	closeOverlay: (_type: keyof typeof OVERLAY_TYPE) => {},
 });
 
 export const FocusProvider = ({children}: {children: ReactNode}) => {
+	const {cardsPerColumn} = useApp();
 	const [focusState, dispatch] = useReducer(reducer, initialState);
-	const [cardsPerColumn, setCardsPerColumn] = useState([]);
 
-	const nextColumn = () => dispatch({type: FOCUS_ACTION.NEXT_COL});
-	const prevColumn = () => dispatch({type: FOCUS_ACTION.PREV_COL});
+	const nextColumn = () => {
+		const nextCol = wrap(
+			focusState.active.columnIndex + 1,
+			LAYOUT.TOTAL_COLUMN,
+		);
+		dispatch({
+			type: FOCUS_ACTION.NEXT_COL,
+			payload: {cardsInCol: cardsPerColumn[nextCol]},
+		});
+	};
+
+	const prevColumn = () => {
+		const prevCol = wrap(
+			focusState.active.columnIndex - 1,
+			LAYOUT.TOTAL_COLUMN,
+		);
+		dispatch({
+			type: FOCUS_ACTION.PREV_COL,
+			payload: {cardsInCol: cardsPerColumn[prevCol]},
+		});
+	};
+
 	const nextCard = () =>
 		dispatch({
 			type: FOCUS_ACTION.NEXT_CARD,
 			payload: {cardsInCol: cardsPerColumn[focusState.active.columnIndex]},
 		});
+
 	const prevCard = () =>
 		dispatch({
 			type: FOCUS_ACTION.PREV_CARD,
 			payload: {cardsInCol: cardsPerColumn[focusState.active.columnIndex]},
+		});
+
+	const expandCard = (board: Board) => {
+		const column = board.columns[focusState.active.columnIndex];
+		if (!column) return;
+		const cardsInColumn = board.cards.filter(
+			card => card.columnId === column.id,
+		);
+		const card = cardsInColumn[focusState.active.cardIndex ?? 0];
+		if (card?.id) {
+			dispatch({
+				type: FOCUS_ACTION.EXPAND_CARD,
+				payload: {cardId: card.id},
+			});
+		}
+	};
+
+	const closeOverlay = (type: keyof typeof OVERLAY_TYPE) =>
+		dispatch({
+			type: FOCUS_ACTION.CLOSE_OVERLAY,
+			payload: {overlay: type},
 		});
 
 	return (
@@ -149,11 +217,12 @@ export const FocusProvider = ({children}: {children: ReactNode}) => {
 			value={{
 				focusState,
 				cardsPerColumn,
-				setCardsPerColumn,
 				nextColumn,
 				prevColumn,
 				nextCard,
 				prevCard,
+				expandCard,
+				closeOverlay,
 			}}
 		>
 			{children}

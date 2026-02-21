@@ -1,5 +1,5 @@
-import React from 'react';
-import {Box, useStdout} from 'ink';
+import {Box as InkBox, useStdout} from 'ink';
+import {Box} from '../shared/index.js';
 import {
 	useEffect,
 	useRef,
@@ -9,7 +9,7 @@ import {
 } from 'react';
 import ansiEscapes from 'ansi-escapes';
 
-type BoxProps = ComponentProps<typeof Box>;
+type BoxProps = ComponentProps<typeof InkBox>;
 
 type ResizeAwareBoxProps = Omit<BoxProps, 'width' | 'height'> & {
 	children: ReactNode | ((dims: {height: number; width: number}) => ReactNode);
@@ -43,7 +43,7 @@ type ResizeAwareBoxProps = Omit<BoxProps, 'width' | 'height'> & {
 	height?: number | string;
 };
 
-export function ResizeAwareBox({
+const ResizeAwareBox = ({
 	children,
 	marginBottom = 1,
 	marginRight = 0,
@@ -52,7 +52,7 @@ export function ResizeAwareBox({
 	width: customWidth,
 	height: customHeight,
 	...boxProps
-}: ResizeAwareBoxProps) {
+}: ResizeAwareBoxProps) => {
 	const {stdout} = useStdout();
 	const [dimensions, setDimensions] = useState({
 		width: stdout.columns,
@@ -99,4 +99,6 @@ export function ResizeAwareBox({
 				: children}
 		</Box>
 	);
-}
+};
+
+export default ResizeAwareBox;

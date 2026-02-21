@@ -31,7 +31,7 @@ export class LocalStrategy implements KanbanStrategy {
 					description:
 						'Create detail view component with proper focus management and keyboard navigation',
 					boardId: 'board-1',
-					columnId: 'todo',
+					columnId: 'doing',
 					priority: 'high',
 					feature: 'Card Details',
 					points: 5,
@@ -148,7 +148,6 @@ export class LocalStrategy implements KanbanStrategy {
 					points: 2,
 				},
 
-				// Content Strategies - Local
 				{
 					id: '13',
 					title: 'Define local config file schema',
@@ -287,6 +286,39 @@ export class LocalStrategy implements KanbanStrategy {
 					priority: 'low',
 					feature: 'Identity',
 					points: 2,
+				},
+				{
+					id: '26',
+					title: 'Plan dynamic keybinding system',
+					description:
+						'Design a system where keybindings change based on UI state (e.g., disable "q" when card detail is open, or repurpose it to close the overlay). Specify requirements for context-aware keybinds and how they are displayed.',
+					boardId: 'board-1',
+					columnId: 'todo',
+					priority: 'high',
+					feature: 'Dynamic Keybindings',
+					points: 3,
+				},
+				{
+					id: '27',
+					title: 'Implement dynamic keybinding system',
+					description:
+						'Implement context-aware keybinding logic so that keybinds are enabled/disabled or repurposed based on the focused component. Update keybind display at the bottom of the terminal to reflect only active keybinds.',
+					boardId: 'board-1',
+					columnId: 'todo',
+					priority: 'high',
+					feature: 'Dynamic Keybindings',
+					points: 8,
+				},
+				{
+					id: '28',
+					title: 'Implement card search/filter functionality',
+					description:
+						'Add a search feature that allows users to filter visible cards based on an input text string. The card list should update in real time as the user types. Ensure search is case-insensitive and matches card titles and descriptions.',
+					boardId: 'board-1',
+					columnId: 'todo',
+					priority: 'medium',
+					feature: 'Search',
+					points: 5,
 				},
 			],
 		},

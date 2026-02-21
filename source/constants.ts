@@ -1,16 +1,5 @@
-import {FOCUS_ACTION} from './context/FocusContext.js';
+import {FOCUS_ACTION} from './context/focusActions.js';
 import {Command} from './core/models.js';
-
-export const COLOR = {
-	PRIMARY: '#79A0C9',
-	SECONDARY: '#EAEBF2',
-	HIGHLIGHT: '#A3D9A5',
-	ALT_HIGHLIGHT: '#D6C8FF',
-	SECONDARY_DIM: '#A8A9B3',
-	YELLOW: '#FFF9C4',
-	ORANGE: '#F6B26B',
-	RED: '#E06666',
-};
 
 export const LAYOUT = {
 	/* CARD_HEIGHT includes 1 row each
@@ -64,5 +53,12 @@ export const COMMANDS: Command[] = [
 		action: FOCUS_ACTION.NEXT_CARD,
 		description: 'Move focus up to next card in active column.',
 		display: true,
+	},
+	{
+		title: 'Expand Card Details',
+		input: ['return'],
+		action: FOCUS_ACTION.EXPAND_CARD,
+		description: 'Expand card to view full details.',
+		display: false,
 	},
 ];

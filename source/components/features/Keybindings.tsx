@@ -1,19 +1,19 @@
-import React from 'react';
-import {Box, Text, useInput} from 'ink';
-import {COLOR, COMMANDS} from '../constants.js';
-import {Column, Command} from '../core/models.js';
-import {FOCUS_ACTION, useFocus} from '../context/FocusContext.js';
-import {useDebug} from '../context/DebugContext.js';
-import {useAppEnv} from '../context/AppEnvContext.js';
+import {Box, Text, useFocusManager, useInput} from 'ink';
 
-type Props = {
-	columns: Column[];
-};
+import {Command} from '../../core/models.js';
+import {COMMANDS} from '../../constants.js';
 
-const Keybindings = ({columns}: Props) => {
-	const {nextColumn, prevColumn, nextCard, prevCard} = useFocus();
+import {useApp, useTheme} from '../../context/AppContext.js';
+import {FOCUS_ACTION} from '../../context/focusActions.js';
+import {useDebug} from '../../context/DebugContext.js';
+import {useFocus} from '../../context/FocusContext.js';
+
+const Keybindings = () => {
+	const theme = useTheme();
+	const {nextColumn, prevColumn, nextCard, prevCard, expandCard} = useFocus();
 	const {addStatement} = useDebug();
-	const {clear, unmount} = useAppEnv();
+	const app = useApp();
+	const {focus} = useFocusManager();
 
 	const displayedCommands = COMMANDS.filter(command => command.display);
 
@@ -24,6 +24,7 @@ const Keybindings = ({columns}: Props) => {
 		else if (key.downArrow) trigger = 'downArrow';
 		else if (key.rightArrow) trigger = 'rightArrow';
 		else if (key.upArrow) trigger = 'upArrow';
+		else if (key.return) trigger = 'return';
 
 		const cmd = COMMANDS.find(c => c.input.includes(trigger));
 		addStatement('Pressed', trigger);
@@ -31,8 +32,8 @@ const Keybindings = ({columns}: Props) => {
 		if (cmd) {
 			switch (cmd.action) {
 				case FOCUS_ACTION.QUIT:
-					clear();
-					unmount();
+					app.clear();
+					app.unmount();
 					break;
 				case FOCUS_ACTION.NEXT_COL:
 					nextColumn();
@@ -47,6 +48,12 @@ const Keybindings = ({columns}: Props) => {
 					break;
 				case FOCUS_ACTION.PREV_CARD:
 					prevCard();
+					break;
+
+				case FOCUS_ACTION.EXPAND_CARD:
+					expandCard(app.board);
+					focus('overlay');
+
 					break;
 
 				default:
@@ -79,7 +86,7 @@ const Keybindings = ({columns}: Props) => {
 				let title = `${inputDisplay}: ${command.title}`;
 				if (index + 1 !== displayedCommands.length) title = `${title} | `;
 				return (
-					<Text key={index} color={COLOR.ALT_HIGHLIGHT}>
+					<Text key={index} color={theme.ALT_HIGHLIGHT}>
 						{title}
 					</Text>
 				);

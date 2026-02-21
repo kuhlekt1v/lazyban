@@ -10,10 +10,10 @@ export type DebugContextValue = {
 const DebugContext = createContext<DebugContextValue | null>(null);
 
 export function DebugProvider({
-	debug,
+	context,
 	children,
 }: {
-	debug: boolean;
+	context: {debug: boolean};
 	children: React.ReactNode;
 }) {
 	const [debugStatements, setDebugStatements] = useState<string[]>([]);
@@ -29,7 +29,12 @@ export function DebugProvider({
 	return (
 		// @ts-ignore
 		<DebugContext.Provider
-			value={{debug, debugStatements, addStatement, clearStatements}}
+			value={{
+				debug: context.debug,
+				debugStatements,
+				addStatement,
+				clearStatements,
+			}}
 		>
 			{children}
 		</DebugContext.Provider>

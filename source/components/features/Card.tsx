@@ -1,8 +1,7 @@
-import React from 'react';
-import {Newline, Text} from 'ink';
-import {COLOR} from '../constants.js';
-import {Card as ICard} from '../core/models.js';
-import Box from './Box.js';
+import {Text} from 'ink';
+import {Box} from '../shared/index.js';
+import {Card as ICard} from '../../core/models.js';
+import {useTheme} from '../../context/AppContext.js';
 
 type CardProps = {
 	card: ICard;
@@ -14,13 +13,13 @@ const displayText = (
 	replacement: Element = <Text>&nbsp;</Text>,
 ) => <Text>{text || replacement}</Text>;
 
-const priorityMap: Record<string, {color: string; value: string}> = {
-	low: {color: COLOR.YELLOW, value: '[!  ]  '},
-	medium: {color: COLOR.ORANGE, value: '[!! ]  '},
-	high: {color: COLOR.RED, value: '[!!!]  '},
-};
-
 const Card = ({card, isActive}: CardProps) => {
+	const theme = useTheme();
+	const priorityMap: Record<string, {color: string; value: string}> = {
+		low: {color: theme.YELLOW, value: '[!  ]  '},
+		medium: {color: theme.ORANGE, value: '[!! ]  '},
+		high: {color: theme.RED, value: '[!!!]  '},
+	};
 	const priority = card.priority && priorityMap[card.priority];
 
 	return (
@@ -31,12 +30,12 @@ const Card = ({card, isActive}: CardProps) => {
 			flexDirection="column"
 			justifyContent="flex-start"
 			borderStyle="single"
-			borderColor={isActive ? COLOR.PRIMARY : COLOR.SECONDARY}
+			borderColor={isActive ? theme.PRIMARY : theme.SECONDARY}
 			width="100%"
 			minHeight={6}
 		>
 			<Text wrap="truncate">{displayText(`${card.id}: ${card.title}`)}</Text>
-			<Text backgroundColor={COLOR.HIGHLIGHT} color="black">
+			<Text backgroundColor={theme.HIGHLIGHT} color="black">
 				{displayText(card.feature)}
 			</Text>
 			<Text wrap="truncate">{displayText(card.description)}</Text>
