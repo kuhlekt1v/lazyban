@@ -9,11 +9,15 @@ type BoxProps = InkBoxProps & {
 	transparent: boolean;
 };
 
-const Box = ({transparent = false, ...props}: BoxProps): Element => {
+const Box = ({
+	transparent = false,
+	backgroundColor,
+	...props
+}: BoxProps): Element => {
 	const theme = useTheme();
 	const boxProps = transparent
 		? props
-		: {...props, backgroundColor: theme.PRIMARY_BACKGROUND};
+		: {...props, backgroundColor: backgroundColor ?? theme.PRIMARY_BACKGROUND};
 	// @ts-ignore
 	return <InkBox {...boxProps} />;
 };
