@@ -12,8 +12,8 @@ export class KanbanService {
 		return this.strategy.getBoards();
 	}
 
-	async getBoard(id: string): Promise<Board> {
-		return this.strategy.getBoard(id);
+	async getBoard(name: string): Promise<Board> {
+		return this.strategy.getBoard(name);
 	}
 
 	async moveCard(cardId: string, columnId: string): Promise<void> {

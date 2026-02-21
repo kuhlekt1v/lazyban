@@ -4,40 +4,43 @@
  */
 export type ID = string;
 
-export interface Card {
+export type provider = 'local' | 'jira';
+
+export type theme = 'dark' | 'light';
+
+export interface BoardConfig {
+	provider: provider;
+	theme: theme;
+	name: string;
+}
+
+/* TODO Revise so that cards
+ * are element of Column.
+ */
+export interface Board {
 	id: ID;
-	title: string;
-	description?: string;
-
-	columnId: ID;
-	boardId: ID;
-
-	assignee?: string;
-	labels?: string[];
-	priority?: 'low' | 'medium' | 'high';
-	feature?: string;
-	points?: number;
-	/**
-	 * Provider-specific data (never used by UI directly)
-	 */
-	metadata?: Record<string, unknown>;
+	name: string;
+	columns: Column[];
+	cards: Card[];
 }
 
 export interface Column {
 	id: ID;
 	name: string;
 	order: number;
-	metadata?: Record<string, unknown>;
 }
 
-export interface Board {
+export interface Card {
 	id: ID;
-	name: string;
+	title: string;
+	description?: string;
 
-	columns: Column[];
-	cards: Card[];
-
-	metadata?: Record<string, unknown>;
+	columnId: ID;
+	assignee?: string;
+	labels?: string[];
+	priority?: 'low' | 'medium' | 'high';
+	feature?: string;
+	points?: number;
 }
 
 export interface Command {
