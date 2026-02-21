@@ -37,6 +37,7 @@ const renderer = (node: DOMElement, isScreenReaderEnabled: boolean): Result => {
 		const output = new Output({
 			width: node.yogaNode.getComputedWidth(),
 			height: node.yogaNode.getComputedHeight(),
+			backgroundColor: node.style.backgroundColor,
 		});
 
 		renderNodeToOutput(node, output, {
@@ -49,6 +50,7 @@ const renderer = (node: DOMElement, isScreenReaderEnabled: boolean): Result => {
 			staticOutput = new Output({
 				width: node.staticNode.yogaNode.getComputedWidth(),
 				height: node.staticNode.yogaNode.getComputedHeight(),
+				backgroundColor: node.staticNode.style.backgroundColor,
 			});
 
 			renderNodeToOutput(node.staticNode, staticOutput, {

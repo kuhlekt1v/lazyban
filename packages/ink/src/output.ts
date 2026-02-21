@@ -8,6 +8,7 @@ import {
 	tokenize,
 } from '@alcalzone/ansi-tokenize';
 import {type OutputTransformer} from './render-node-to-output.js';
+import colorize from './colorize.js';
 
 /**
 "Virtual" output class
@@ -20,6 +21,7 @@ Used to generate the final output of all nodes before writing it to actual outpu
 type Options = {
 	width: number;
 	height: number;
+	backgroundColor?: string;
 };
 
 type Operation = WriteOperation | ClipOperation | UnclipOperation;
@@ -51,14 +53,16 @@ type UnclipOperation = {
 export default class Output {
 	width: number;
 	height: number;
+	backgroundColor?: string;
 
 	private readonly operations: Operation[] = [];
 
 	constructor(options: Options) {
-		const {width, height} = options;
+		const {width, height, backgroundColor} = options;
 
 		this.width = width;
 		this.height = height;
+		this.backgroundColor = backgroundColor;
 	}
 
 	write(
@@ -99,16 +103,24 @@ export default class Output {
 		// Initialize output array with a specific set of rows, so that margin/padding at the bottom is preserved
 		const output: StyledChar[][] = [];
 
+		// If a background color is set, apply it to all initial spaces
+		const initialSpace = this.backgroundColor
+			? colorize(' ', this.backgroundColor, 'background')
+			: ' ';
+
+		const initialChars = styledCharsFromTokens(tokenize(initialSpace));
+		const initialChar = initialChars[0] ?? {
+			type: 'char' as const,
+			value: ' ',
+			fullWidth: false,
+			styles: [],
+		};
+
 		for (let y = 0; y < this.height; y++) {
 			const row: StyledChar[] = [];
 
 			for (let x = 0; x < this.width; x++) {
-				row.push({
-					type: 'char',
-					value: ' ',
-					fullWidth: false,
-					styles: [],
-				});
+				row.push({...initialChar});
 			}
 
 			output.push(row);
