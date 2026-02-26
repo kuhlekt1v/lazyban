@@ -1,26 +1,18 @@
 import {Text} from 'ink';
-import {Box} from '../shared/index.js';
+import {Box, Priority} from '../shared/index.js';
 import {Card as ICard} from '../../core/models.js';
 import {useTheme} from '../../context/AppContext.js';
+import {getPriority} from '../../utils/priorityMap.js';
+import {displayText} from '../../utils/displayText.js';
 
 type CardProps = {
 	card: ICard;
 	isActive: boolean;
 };
 
-const displayText = (
-	text: string | null | undefined,
-	replacement: Element = <Text>&nbsp;</Text>,
-) => <Text>{text || replacement}</Text>;
-
 const Card = ({card, isActive}: CardProps) => {
 	const theme = useTheme();
-	const priorityMap: Record<string, {color: string; value: string}> = {
-		low: {color: theme.YELLOW, value: '[!  ]  '},
-		medium: {color: theme.ORANGE, value: '[!! ]  '},
-		high: {color: theme.RED, value: '[!!!]  '},
-	};
-	const priority = card.priority && priorityMap[card.priority];
+	const priority = getPriority(theme, card.priority);
 
 	return (
 		<Box
@@ -40,9 +32,7 @@ const Card = ({card, isActive}: CardProps) => {
 			</Text>
 			<Text wrap="truncate">{displayText(card.description)}</Text>
 			<Text>
-				<Text color={priority?.color}>
-					{displayText(priority?.value, '[   ]  ')}
-				</Text>
+				<Priority priority={card.priority} />
 				<Text>{displayText(card.points as unknown as string, '-')}</Text>
 			</Text>
 		</Box>

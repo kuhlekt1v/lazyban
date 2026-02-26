@@ -30,6 +30,8 @@ export interface Column {
 	order: number;
 }
 
+export type Priority = 'low' | 'medium' | 'high';
+
 export interface Card {
 	id: ID;
 	title: string;
@@ -38,7 +40,7 @@ export interface Card {
 	columnId: ID;
 	assignee?: string;
 	labels?: string[];
-	priority?: 'low' | 'medium' | 'high';
+	priority?: Priority;
 	feature?: string;
 	points?: number;
 }
