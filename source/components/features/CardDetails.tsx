@@ -1,27 +1,32 @@
+import {ReactNode} from 'react';
 import {Text} from 'ink';
 import {useApp, useTheme} from '../../context/AppContext.js';
 import {useFocus} from '../../context/FocusContext.js';
-import {Card, Priority as PriorityType} from '../../core/models.js';
+import {
+	Card,
+	Comment,
+	Priority as PriorityType,
+} from '../../core/models.js';
 import Box from '../shared/Box.js';
 import Priority from '../shared/Priority.js';
 
-type CardProps = {
+type CardViewProps = {
 	card: Card;
 	boardName: string;
 };
 
 type DetailProps = {
 	label: string;
-	value: string;
+	value: ReactNode;
 };
 
 const Detail = ({label, value}: DetailProps) => {
 	return (
 		<Box width="100%" flexDirection="row">
-			<Text width="25%" bold>
+			<Text bold>
 				{label}:&nbsp;
 			</Text>
-			<Text width="75%">{value != null ? value : '-'}</Text>
+			<Text>{value != null ? value : '-'}</Text>
 		</Box>
 	);
 };
@@ -36,13 +41,51 @@ const PriorityLabel = ({priority}: {priority?: PriorityType}) => {
 			<Priority priority={priority} />
 		</>
 	) : (
-		'-'
+		<>-</>
 	);
 };
 
-const Card = ({boardName, card}: CardProps) => {
+const formatRelativeTime = (dateString: string): string => {
+	const now = new Date();
+	const date = new Date(dateString);
+	const diffMs = now.getTime() - date.getTime();
+	const diffMinutes = Math.floor(diffMs / 60_000);
+	const diffHours = Math.floor(diffMs / 3_600_000);
+	const diffDays = Math.floor(diffMs / 86_400_000);
+
+	if (diffMinutes < 1) {
+		return 'just now';
+	}
+
+	if (diffMinutes < 60) {
+		return `${diffMinutes}m ago`;
+	}
+
+	if (diffHours < 24) {
+		return `${diffHours}h ago`;
+	}
+
+	return `${diffDays}d ago`;
+};
+
+const CommentRow = ({comment}: {comment: Comment}) => {
+	const theme = useTheme();
+	return (
+		<Box width="100%" flexDirection="row" justifyContent="space-between">
+			<Text>
+				<Text color={theme.PRIMARY}>@{comment.author}</Text>: {comment.text}
+			</Text>
+			<Text dimColor>{formatRelativeTime(comment.createdAt)}</Text>
+		</Box>
+	);
+};
+
+const CardView = ({boardName, card}: CardViewProps) => {
+	const comments = card.comments ?? [];
+
 	return (
 		<Box width="100%" marginX={1} flexDirection="column">
+			{/* Header */}
 			<Box
 				justifyContent="space-between"
 				height={2}
@@ -56,12 +99,80 @@ const Card = ({boardName, card}: CardProps) => {
 				<Text>{boardName} | Card Details</Text>
 				<Text>[ESC]</Text>
 			</Box>
+
+			{/* Title and Feature */}
 			<Detail label="Title" value={card.title} />
 			<Detail label="Feature" value={card.feature} />
-			<Detail
-				label="Priority"
-				value={<PriorityLabel priority={card.priority} />}
-			/>
+
+			{/* Priority and Points row */}
+			<Box width="100%" flexDirection="row" justifyContent="space-between">
+				<Box flexDirection="row">
+					<Text bold>Priority:&nbsp;</Text>
+					<Text>
+						<PriorityLabel priority={card.priority} />
+					</Text>
+				</Box>
+				<Box flexDirection="row">
+					<Text bold>Points:&nbsp;</Text>
+					<Text>{card.points != null ? String(card.points) : '-'}</Text>
+				</Box>
+			</Box>
+
+			{/* Description */}
+			<Box width="100%" flexDirection="column" marginTop={1}>
+				<Text bold>Description:</Text>
+				<Box
+					width="100%"
+					borderStyle="single"
+					borderDimColor
+					flexDirection="column"
+					paddingX={1}
+				>
+					<Text wrap="wrap">
+						{card.description ?? 'No description provided.'}
+					</Text>
+				</Box>
+			</Box>
+
+			{/* Due Date */}
+			<Box width="100%" marginTop={1}>
+				<Detail label="Due Date" value={card.dueDate ?? '-'} />
+			</Box>
+
+			{/* Comments */}
+			<Box width="100%" flexDirection="column" marginTop={1}>
+				<Text bold>Comments ({comments.length}):</Text>
+				<Box
+					width="100%"
+					borderStyle="single"
+					borderDimColor
+					flexDirection="column"
+					paddingX={1}
+				>
+					{comments.length > 0 ? (
+						comments.map((comment, index) => (
+							<CommentRow key={index} comment={comment} />
+						))
+					) : (
+						<Text dimColor>No comments yet.</Text>
+					)}
+				</Box>
+			</Box>
+
+			{/* Footer */}
+			<Box
+				width="100%"
+				marginTop={1}
+				borderStyle="single"
+				borderDimColor
+				borderLeft={false}
+				borderRight={false}
+				borderBottom={false}
+			>
+				<Text dimColor>
+					TAB: Switch Section | ↑↓, jk: Scroll | e: Edit (post-MVP)
+				</Text>
+			</Box>
 		</Box>
 	);
 };
@@ -74,7 +185,7 @@ const CardDetails = () => {
 		: undefined;
 
 	return card ? (
-		<Card card={card} boardName={board.name} />
+		<CardView card={card} boardName={board.name} />
 	) : (
 		<Text>No card selected</Text>
 	);
