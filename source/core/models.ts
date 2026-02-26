@@ -35,6 +35,7 @@ export type Priority = 'low' | 'medium' | 'high';
 export interface Comment {
 	author: string;
 	text: string;
+	/** ISO 8601 formatted timestamp */
 	createdAt: string;
 }
 

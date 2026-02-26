@@ -49,6 +49,11 @@ const formatRelativeTime = (dateString: string): string => {
 	const now = new Date();
 	const date = new Date(dateString);
 	const diffMs = now.getTime() - date.getTime();
+
+	if (diffMs < 0) {
+		return 'upcoming';
+	}
+
 	const diffMinutes = Math.floor(diffMs / 60_000);
 	const diffHours = Math.floor(diffMs / 3_600_000);
 	const diffDays = Math.floor(diffMs / 86_400_000);
@@ -150,8 +155,11 @@ const CardView = ({boardName, card}: CardViewProps) => {
 					paddingX={1}
 				>
 					{comments.length > 0 ? (
-						comments.map((comment, index) => (
-							<CommentRow key={index} comment={comment} />
+						comments.map(comment => (
+							<CommentRow
+								key={`${comment.author}-${comment.createdAt}`}
+								comment={comment}
+							/>
 						))
 					) : (
 						<Text dimColor>No comments yet.</Text>
