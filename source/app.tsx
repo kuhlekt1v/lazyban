@@ -1,9 +1,10 @@
-import {Board, CardDetails} from './components/features/index.js';
+import {Board, CardDetails, HelpMenu} from './components/features/index.js';
 import {Box, Overlay} from './components/shared/index.js';
 import {useTheme} from './context/AppContext.js';
 
 import {useFocus} from './context/FocusContext.js';
 import {useApp} from './context/AppContext.js';
+import {OVERLAY_TYPE} from './context/FocusContext.js';
 
 export default function App() {
 	const theme = useTheme();
@@ -22,8 +23,23 @@ export default function App() {
 			>
 				<Board id="board" />
 				{focusState.cardDetailOpen && (
-					<Overlay id="overlay" height={95} transparent={false}>
+					<Overlay
+						id="overlay"
+						height={95}
+						transparent={false}
+						overlayType={OVERLAY_TYPE.DETAIL}
+					>
 						<CardDetails />
+					</Overlay>
+				)}
+				{focusState.helpMenuOpen && (
+					<Overlay
+						id="overlay"
+						height={95}
+						transparent={false}
+						overlayType={OVERLAY_TYPE.HELP}
+					>
+						<HelpMenu />
 					</Overlay>
 				)}
 			</Box>

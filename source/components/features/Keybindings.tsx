@@ -10,7 +10,8 @@ import {useFocus} from '../../context/FocusContext.js';
 
 const Keybindings = () => {
 	const theme = useTheme();
-	const {nextColumn, prevColumn, nextCard, prevCard, expandCard} = useFocus();
+	const {nextColumn, prevColumn, nextCard, prevCard, expandCard, openHelpMenu} =
+		useFocus();
 	const {addStatement} = useDebug();
 	const app = useApp();
 	const {focus} = useFocusManager();
@@ -54,6 +55,11 @@ const Keybindings = () => {
 					expandCard(app.board);
 					focus('overlay');
 
+					break;
+
+				case FOCUS_ACTION.KEYBINDINGS:
+					openHelpMenu();
+					focus('overlay');
 					break;
 
 				default:
