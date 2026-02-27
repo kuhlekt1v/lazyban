@@ -7,6 +7,7 @@ import {Board, ID} from '../core/models.js';
 export const OVERLAY_TYPE = {
 	DETAIL: 'DETAIL',
 	HELP: 'HELP',
+	QUIT: 'QUIT',
 } as const;
 
 type Action =
@@ -36,9 +37,6 @@ type Action =
 	  }
 	| {
 			type: typeof FOCUS_ACTION.SHOW_QUIT_PROMPT;
-	  }
-	| {
-			type: typeof FOCUS_ACTION.HIDE_QUIT_PROMPT;
 	  };
 
 export interface FocusState {
@@ -62,7 +60,6 @@ interface FocusContextValue {
 	expandCard: (cardId: Board) => void;
 	closeOverlay: (type: keyof typeof OVERLAY_TYPE) => void;
 	showQuitPrompt: () => void;
-	hideQuitPrompt: () => void;
 }
 
 const initialState: FocusState = {
@@ -143,15 +140,14 @@ const reducer = (state: FocusState, action: Action): FocusState => {
 			if (overlay === 'HELP') {
 				return {...state, helpMenuOpen: false};
 			}
+			if (overlay === 'QUIT') {
+				return {...state, quitPromptOpen: false};
+			}
 			return state;
 		}
 
 		case FOCUS_ACTION.SHOW_QUIT_PROMPT: {
 			return {...state, quitPromptOpen: true};
-		}
-
-		case FOCUS_ACTION.HIDE_QUIT_PROMPT: {
-			return {...state, quitPromptOpen: false};
 		}
 
 		default:
@@ -169,7 +165,6 @@ const FocusContext = createContext<FocusContextValue>({
 	expandCard: () => {},
 	closeOverlay: (_type: keyof typeof OVERLAY_TYPE) => {},
 	showQuitPrompt: () => {},
-	hideQuitPrompt: () => {},
 });
 
 export const FocusProvider = ({children}: {children: ReactNode}) => {
@@ -236,11 +231,6 @@ export const FocusProvider = ({children}: {children: ReactNode}) => {
 			type: FOCUS_ACTION.SHOW_QUIT_PROMPT,
 		});
 
-	const hideQuitPrompt = () =>
-		dispatch({
-			type: FOCUS_ACTION.HIDE_QUIT_PROMPT,
-		});
-
 	return (
 		// @ts-ignore
 		<FocusContext.Provider
@@ -254,7 +244,6 @@ export const FocusProvider = ({children}: {children: ReactNode}) => {
 				expandCard,
 				closeOverlay,
 				showQuitPrompt,
-				hideQuitPrompt,
 			}}
 		>
 			{children}

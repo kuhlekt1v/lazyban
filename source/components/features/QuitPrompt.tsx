@@ -1,12 +1,12 @@
 import {Box, Text, useInput} from 'ink';
 import {useApp, useTheme} from '../../context/AppContext.js';
-import {useFocus} from '../../context/FocusContext.js';
+import {OVERLAY_TYPE, useFocus} from '../../context/FocusContext.js';
 import {useFocusManager} from 'ink';
 
 const QuitPrompt = () => {
 	const theme = useTheme();
 	const app = useApp();
-	const {hideQuitPrompt} = useFocus();
+	const {closeOverlay} = useFocus();
 	const {focus} = useFocusManager();
 
 	useInput((input, _key) => {
@@ -16,7 +16,7 @@ const QuitPrompt = () => {
 			app.unmount();
 		} else {
 			// Cancel quit
-			hideQuitPrompt();
+			closeOverlay(OVERLAY_TYPE.QUIT);
 			focus('board');
 		}
 	});
