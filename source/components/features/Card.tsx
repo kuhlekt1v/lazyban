@@ -27,6 +27,7 @@ const Card = ({card, isActive}: CardProps) => {
 			minHeight={6}
 		>
 			<Text wrap="truncate">{displayText(`${card.id}: ${card.title}`)}</Text>
+
 			<Text backgroundColor={theme.HIGHLIGHT} color="black">
 				{displayText(card.feature)}
 			</Text>

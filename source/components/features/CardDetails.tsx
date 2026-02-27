@@ -2,11 +2,7 @@ import {ReactNode} from 'react';
 import {Text} from 'ink';
 import {useApp, useTheme} from '../../context/AppContext.js';
 import {useFocus} from '../../context/FocusContext.js';
-import {
-	Card,
-	Comment,
-	Priority as PriorityType,
-} from '../../core/models.js';
+import {Card, Comment, Priority as PriorityType} from '../../core/models.js';
 import Box from '../shared/Box.js';
 import Priority from '../shared/Priority.js';
 
@@ -18,14 +14,17 @@ type CardViewProps = {
 type DetailProps = {
 	label: string;
 	value: ReactNode;
+	rightAlign?: boolean;
 };
 
-const Detail = ({label, value}: DetailProps) => {
+const Detail = ({label, value, rightAlign}: DetailProps) => {
 	return (
-		<Box width="100%" flexDirection="row">
-			<Text bold>
-				{label}:&nbsp;
-			</Text>
+		<Box
+			width="100%"
+			flexDirection="row"
+			justifyContent={rightAlign ? 'flex-end' : undefined}
+		>
+			<Text bold>{label}:&nbsp;</Text>
 			<Text>{value != null ? value : '-'}</Text>
 		</Box>
 	);
@@ -89,7 +88,7 @@ const CardView = ({boardName, card}: CardViewProps) => {
 	const comments = card.comments ?? [];
 
 	return (
-		<Box width="100%" marginX={1} flexDirection="column">
+		<Box width="100%" flexDirection="column" marginX={1}>
 			{/* Header */}
 			<Box
 				justifyContent="space-between"
@@ -111,16 +110,11 @@ const CardView = ({boardName, card}: CardViewProps) => {
 
 			{/* Priority and Points row */}
 			<Box width="100%" flexDirection="row" justifyContent="space-between">
-				<Box flexDirection="row">
-					<Text bold>Priority:&nbsp;</Text>
-					<Text>
-						<PriorityLabel priority={card.priority} />
-					</Text>
-				</Box>
-				<Box flexDirection="row">
-					<Text bold>Points:&nbsp;</Text>
-					<Text>{card.points != null ? String(card.points) : '-'}</Text>
-				</Box>
+				<Detail
+					label="Priority"
+					value={<PriorityLabel priority={card.priority} />}
+				/>
+				<Detail label="Points" value={String(card.points)} rightAlign={true} />
 			</Box>
 
 			{/* Description */}
@@ -177,9 +171,7 @@ const CardView = ({boardName, card}: CardViewProps) => {
 				borderRight={false}
 				borderBottom={false}
 			>
-				<Text dimColor>
-					TAB: Switch Section | ↑↓, jk: Scroll | e: Edit (post-MVP)
-				</Text>
+				<Text dimColor>TAB: Switch Section | ↑↓, jk: Scroll</Text>
 			</Box>
 		</Box>
 	);
