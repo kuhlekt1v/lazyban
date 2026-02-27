@@ -6,6 +6,7 @@ import {Card, Comment, Priority as PriorityType} from '../../core/models.js';
 import Box from '../shared/Box.js';
 import Priority from '../shared/Priority.js';
 import {ScrollView, ScrollViewRef} from 'ink-scroll-view';
+import {ScrollBarBox} from '@byteland/ink-scroll-bar';
 
 type CardViewProps = {
 	card: Card;
@@ -94,6 +95,16 @@ const CardView = ({boardName, card}: CardViewProps) => {
 	const detailsScrollRef = useRef<ScrollViewRef>(null);
 	const commentsScrollRef = useRef<ScrollViewRef>(null);
 
+	// Track scroll state for description section
+	const [detailsScrollOffset, setDetailsScrollOffset] = useState(0);
+	const [detailsContentHeight, setDetailsContentHeight] = useState(0);
+	const [detailsViewportHeight, setDetailsViewportHeight] = useState(0);
+
+	// Track scroll state for comments section
+	const [commentsScrollOffset, setCommentsScrollOffset] = useState(0);
+	const [commentsContentHeight, setCommentsContentHeight] = useState(0);
+	const [commentsViewportHeight, setCommentsViewportHeight] = useState(0);
+
 	// Handle TAB key to switch between sections
 	useInput((input, key) => {
 		if (key.tab) {
@@ -107,6 +118,13 @@ const CardView = ({boardName, card}: CardViewProps) => {
 		const scrollRef =
 			activeSection === 'details' ? detailsScrollRef : commentsScrollRef;
 		if (!scrollRef.current || activeSection === 'none') return;
+
+		// Only allow scrolling when content exceeds the viewport
+		const canScroll =
+			activeSection === 'details'
+				? detailsContentHeight > detailsViewportHeight
+				: commentsContentHeight > commentsViewportHeight;
+		if (!canScroll) return;
 
 		if (key.upArrow || input === 'k') {
 			scrollRef.current.scrollBy(-1);
@@ -158,24 +176,35 @@ const CardView = ({boardName, card}: CardViewProps) => {
 			{/* Description with ScrollView */}
 			<Box width="100%" flexDirection="column" marginTop={1} flexShrink={0}>
 				<Text bold>Description:</Text>
-				<Box
+				{/* @ts-ignore */}
+				<ScrollBarBox
 					width="100%"
 					height={8}
 					borderStyle="single"
 					borderColor={
 						activeSection === 'details' ? theme.PRIMARY : theme.SECONDARY
 					}
-					flexDirection="column"
+					contentHeight={detailsContentHeight}
+					viewportHeight={detailsViewportHeight}
+					scrollOffset={detailsScrollOffset}
+					scrollBarAutoHide
 				>
 					{/* @ts-ignore */}
-					<ScrollView ref={detailsScrollRef}>
+					<ScrollView
+						ref={detailsScrollRef}
+						onScroll={setDetailsScrollOffset}
+						onContentHeightChange={(h: number) => setDetailsContentHeight(h)}
+						onViewportSizeChange={(s: {width: number; height: number}) =>
+							setDetailsViewportHeight(s.height)
+						}
+					>
 						<Box paddingX={1}>
 							<Text wrap="wrap">
 								{card.description ?? 'No description provided.'}
 							</Text>
 						</Box>
 					</ScrollView>
-				</Box>
+				</ScrollBarBox>
 			</Box>
 
 			{/* Due Date */}
@@ -186,17 +215,28 @@ const CardView = ({boardName, card}: CardViewProps) => {
 			{/* Comments with ScrollView */}
 			<Box width="100%" flexDirection="column" marginTop={1} flexGrow={1}>
 				<Text bold>Comments ({comments.length}):</Text>
-				<Box
+				{/* @ts-ignore */}
+				<ScrollBarBox
 					width="100%"
 					height={8}
 					borderStyle="single"
 					borderColor={
 						activeSection === 'comments' ? theme.PRIMARY : theme.SECONDARY
 					}
-					flexDirection="column"
+					contentHeight={commentsContentHeight}
+					viewportHeight={commentsViewportHeight}
+					scrollOffset={commentsScrollOffset}
+					scrollBarAutoHide
 				>
 					{/* @ts-ignore */}
-					<ScrollView ref={commentsScrollRef}>
+					<ScrollView
+						ref={commentsScrollRef}
+						onScroll={setCommentsScrollOffset}
+						onContentHeightChange={(h: number) => setCommentsContentHeight(h)}
+						onViewportSizeChange={(s: {width: number; height: number}) =>
+							setCommentsViewportHeight(s.height)
+						}
+					>
 						<Box paddingX={1} flexDirection="column">
 							{comments.length > 0 ? (
 								comments.map(comment => (
@@ -210,7 +250,7 @@ const CardView = ({boardName, card}: CardViewProps) => {
 							)}
 						</Box>
 					</ScrollView>
-				</Box>
+				</ScrollBarBox>
 			</Box>
 
 			{/* Footer - Fixed to bottom */}
