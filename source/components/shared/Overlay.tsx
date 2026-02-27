@@ -8,8 +8,14 @@ type OverlayProps = {
 	height: number;
 	width: number;
 	children: ReactNode;
+	transparent?: boolean;
 };
-const Overlay = ({height = 50, width = 50, children}: OverlayProps) => {
+const Overlay = ({
+	height = 50,
+	width = 50,
+	transparent = true,
+	children,
+}: OverlayProps) => {
 	const theme = useTheme();
 	const heightPercent = `${height}%`;
 	const widthPercent = `${width}%`;
@@ -32,7 +38,7 @@ const Overlay = ({height = 50, width = 50, children}: OverlayProps) => {
 			height="100%"
 			alignItems="center"
 			justifyContent="center"
-			transparent={true}
+			transparent={transparent}
 		>
 			<Box
 				borderStyle="round"

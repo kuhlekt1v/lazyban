@@ -32,6 +32,13 @@ export interface Column {
 
 export type Priority = 'low' | 'medium' | 'high';
 
+export interface Comment {
+	author: string;
+	text: string;
+	/** ISO 8601 formatted timestamp */
+	createdAt: string;
+}
+
 export interface Card {
 	id: ID;
 	title: string;
@@ -43,6 +50,8 @@ export interface Card {
 	priority?: Priority;
 	feature?: string;
 	points?: number;
+	dueDate?: string;
+	comments?: Comment[];
 }
 
 export interface Command {

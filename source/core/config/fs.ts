@@ -72,6 +72,11 @@ export function createBoardFile(boardName: string): void {
 	#   priority:    low|medium|high
 	#   feature:     Feature name
 	#   points:      number
+	#   dueDate:     Due date (YYYY-MM-DD)
+	#   comments:    List of comments
+	#     - author:  Comment author
+	#       text:    Comment text
+	#       createdAt: ISO 8601 timestamp
   #
 	####################################
 `;

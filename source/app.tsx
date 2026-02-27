@@ -22,7 +22,7 @@ export default function App() {
 			>
 				<Board id="board" />
 				{focusState.cardDetailOpen && (
-					<Overlay id="overlay">
+					<Overlay id="overlay" height={95} transparent={false}>
 						<CardDetails />
 					</Overlay>
 				)}
