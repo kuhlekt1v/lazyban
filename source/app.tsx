@@ -1,4 +1,4 @@
-import {Board, CardDetails} from './components/features/index.js';
+import {Board, CardDetails, QuitPrompt} from './components/features/index.js';
 import {Box, Overlay} from './components/shared/index.js';
 import {useTheme} from './context/AppContext.js';
 
@@ -24,6 +24,11 @@ export default function App() {
 				{focusState.cardDetailOpen && (
 					<Overlay id="overlay">
 						<CardDetails />
+					</Overlay>
+				)}
+				{focusState.quitPromptOpen && (
+					<Overlay id="quit-prompt" height={20} width={60}>
+						<QuitPrompt />
 					</Overlay>
 				)}
 			</Box>
