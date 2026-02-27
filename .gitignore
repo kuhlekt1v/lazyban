@@ -30,8 +30,10 @@ yarn-error.log*
 .env.*.local
 
 # Coverage
-coverage/ode_modules
-dist
+coverage/
 
 # Board
 .board/
+
+# Astro
+.astro/
