@@ -1,10 +1,11 @@
-import {ReactNode} from 'react';
-import {Text} from 'ink';
+import {ReactNode, useRef, useState} from 'react';
+import {Text, useInput} from 'ink';
 import {useApp, useTheme} from '../../context/AppContext.js';
 import {useFocus} from '../../context/FocusContext.js';
 import {Card, Comment, Priority as PriorityType} from '../../core/models.js';
 import Box from '../shared/Box.js';
 import Priority from '../shared/Priority.js';
+import {ScrollView, ScrollViewRef} from 'ink-scroll-view';
 
 type CardViewProps = {
 	card: Card;
@@ -84,11 +85,38 @@ const CommentRow = ({comment}: {comment: Comment}) => {
 	);
 };
 
+type ActiveSection = 'none' | 'details' | 'comments';
+
 const CardView = ({boardName, card}: CardViewProps) => {
+	const theme = useTheme();
 	const comments = card.comments ?? [];
+	const [activeSection, setActiveSection] = useState<ActiveSection>('none');
+	const detailsScrollRef = useRef<ScrollViewRef>(null);
+	const commentsScrollRef = useRef<ScrollViewRef>(null);
+
+	// Handle TAB key to switch between sections
+	useInput((input, key) => {
+		if (key.tab) {
+			setActiveSection(prev => {
+				if (prev === 'none' || prev === 'comments') return 'details';
+				return 'comments';
+			});
+		}
+
+		// Handle scroll for active section
+		const scrollRef =
+			activeSection === 'details' ? detailsScrollRef : commentsScrollRef;
+		if (!scrollRef.current || activeSection === 'none') return;
+
+		if (key.upArrow || input === 'k') {
+			scrollRef.current.scrollBy(-1);
+		} else if (key.downArrow || input === 'j') {
+			scrollRef.current.scrollBy(1);
+		}
+	});
 
 	return (
-		<Box width="100%" flexDirection="column" marginX={1}>
+		<Box width="100%" height="100%" flexDirection="column" marginX={1}>
 			{/* Header */}
 			<Box
 				justifyContent="space-between"
@@ -99,17 +127,27 @@ const CardView = ({boardName, card}: CardViewProps) => {
 				borderLeft={false}
 				borderRight={false}
 				borderTop={false}
+				flexShrink={0}
 			>
 				<Text>{boardName} | Card Details</Text>
 				<Text>[ESC]</Text>
 			</Box>
 
 			{/* Title and Feature */}
-			<Detail label="Title" value={card.title} />
-			<Detail label="Feature" value={card.feature} />
+			<Box flexShrink={0}>
+				<Detail label="Title" value={card.title} />
+			</Box>
+			<Box flexShrink={0}>
+				<Detail label="Feature" value={card.feature} />
+			</Box>
 
 			{/* Priority and Points row */}
-			<Box width="100%" flexDirection="row" justifyContent="space-between">
+			<Box
+				width="100%"
+				flexDirection="row"
+				justifyContent="space-between"
+				flexShrink={0}
+			>
 				<Detail
 					label="Priority"
 					value={<PriorityLabel priority={card.priority} />}
@@ -117,51 +155,65 @@ const CardView = ({boardName, card}: CardViewProps) => {
 				<Detail label="Points" value={String(card.points)} rightAlign={true} />
 			</Box>
 
-			{/* Description */}
-			<Box width="100%" flexDirection="column" marginTop={1}>
+			{/* Description with ScrollView */}
+			<Box width="100%" flexDirection="column" marginTop={1} flexShrink={0}>
 				<Text bold>Description:</Text>
 				<Box
 					width="100%"
+					height={8}
 					borderStyle="single"
-					borderDimColor
+					borderColor={
+						activeSection === 'details' ? theme.PRIMARY : theme.SECONDARY
+					}
 					flexDirection="column"
-					paddingX={1}
 				>
-					<Text wrap="wrap">
-						{card.description ?? 'No description provided.'}
-					</Text>
+					{/* @ts-ignore */}
+					<ScrollView ref={detailsScrollRef}>
+						<Box paddingX={1}>
+							<Text wrap="wrap">
+								{card.description ?? 'No description provided.'}
+							</Text>
+						</Box>
+					</ScrollView>
 				</Box>
 			</Box>
 
 			{/* Due Date */}
-			<Box width="100%" marginTop={1}>
+			<Box width="100%" marginTop={1} flexShrink={0}>
 				<Detail label="Due Date" value={card.dueDate ?? '-'} />
 			</Box>
 
-			{/* Comments */}
-			<Box width="100%" flexDirection="column" marginTop={1}>
+			{/* Comments with ScrollView */}
+			<Box width="100%" flexDirection="column" marginTop={1} flexGrow={1}>
 				<Text bold>Comments ({comments.length}):</Text>
 				<Box
 					width="100%"
+					height={8}
 					borderStyle="single"
-					borderDimColor
+					borderColor={
+						activeSection === 'comments' ? theme.PRIMARY : theme.SECONDARY
+					}
 					flexDirection="column"
-					paddingX={1}
 				>
-					{comments.length > 0 ? (
-						comments.map(comment => (
-							<CommentRow
-								key={`${comment.author}-${comment.createdAt}`}
-								comment={comment}
-							/>
-						))
-					) : (
-						<Text dimColor>No comments yet.</Text>
-					)}
+					{/* @ts-ignore */}
+					<ScrollView ref={commentsScrollRef}>
+						<Box paddingX={1} flexDirection="column">
+							{comments.length > 0 ? (
+								comments.map(comment => (
+									<CommentRow
+										key={`${comment.author}-${comment.createdAt}`}
+										comment={comment}
+									/>
+								))
+							) : (
+								<Text dimColor>No comments yet.</Text>
+							)}
+						</Box>
+					</ScrollView>
 				</Box>
 			</Box>
 
-			{/* Footer */}
+			{/* Footer - Fixed to bottom */}
 			<Box
 				width="100%"
 				marginTop={1}
@@ -170,6 +222,7 @@ const CardView = ({boardName, card}: CardViewProps) => {
 				borderLeft={false}
 				borderRight={false}
 				borderBottom={false}
+				flexShrink={0}
 			>
 				<Text dimColor>TAB: Switch Section | ↑↓, jk: Scroll</Text>
 			</Box>

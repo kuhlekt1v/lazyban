@@ -8,12 +8,18 @@ importers:
 
   .:
     dependencies:
+      '@byteland/ink-scroll-bar':
+        specifier: ^1.0.0
+        version: 1.0.0(ink@packages+ink)(react@19.2.3)
       ansi-escapes:
         specifier: ^7.2.0
         version: 7.2.0
       ink:
         specifier: workspace:*
         version: link:packages/ink
+      ink-scroll-view:
+        specifier: ^0.3.6
+        version: 0.3.6(ink@packages+ink)(react@19.2.3)
       js-yaml:
         specifier: ^4.1.1
         version: 4.1.1
@@ -243,6 +249,12 @@ packages:
   '@babel/helper-validator-identifier@7.28.5':
     resolution: {integrity: sha512-qSs4ifwzKJSV39ucNjsvc6WVHs6b7S03sOh2OcHF9UHfVPqWWALUsNUVzhSBiItjRZoLHx7nIarVjqKVusUZ1Q==}
     engines: {node: '>=6.9.0'}
+
+  '@byteland/ink-scroll-bar@1.0.0':
+    resolution: {integrity: sha512-5wfUK9H6iQI3v66uk7nQ3mJIahooA2oYpVKc5PtXMb68+z8EbWFT15wxVSJ9/x8an8oGgeGvdJcLCKdv9bjVdg==}
+    peerDependencies:
+      ink: '>=6'
+      react: '>=19'
 
   '@cspotcode/source-map-support@0.8.1':
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
@@ -1737,7 +1749,7 @@ packages:
 
   glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
-    deprecated: Glob versions prior to v9 are no longer supported
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
   globals@13.24.0:
     resolution: {integrity: sha512-AhO5QUcj8llrbG09iWhPU2B204J1xnPeL8kQmVorSsy+Sjj1sk8gIyh6cUocGmH4L0UuhAJy+hJMRA4mgA4mFQ==}
@@ -1871,6 +1883,12 @@ packages:
 
   inherits@2.0.4:
     resolution: {integrity: sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==}
+
+  ink-scroll-view@0.3.6:
+    resolution: {integrity: sha512-XqLkmFFCA5Ow2lVyvv7q0aVHzB78XojIM8gZMQ3//lvy8ZDpJsXWtTRwsCEsdQHnwvMCDCnKCzgF4xkkzoN8mQ==}
+    peerDependencies:
+      ink: ^5 || ^6
+      react: ^18 || ^19
 
   ink-testing-library@3.0.0:
     resolution: {integrity: sha512-ItyyoOmcm6yftb7c5mZI2HU22BWzue8PBbO3DStmY8B9xaqfKr7QJONiWOXcwVsOk/6HuVQ0v7N5xhPaR3jycA==}
@@ -3372,6 +3390,11 @@ snapshots:
       picocolors: 1.1.1
 
   '@babel/helper-validator-identifier@7.28.5': {}
+
+  '@byteland/ink-scroll-bar@1.0.0(ink@packages+ink)(react@19.2.3)':
+    dependencies:
+      ink: link:packages/ink
+      react: 19.2.3
 
   '@cspotcode/source-map-support@0.8.1':
     dependencies:
@@ -5264,6 +5287,11 @@ snapshots:
       wrappy: 1.0.2
 
   inherits@2.0.4: {}
+
+  ink-scroll-view@0.3.6(ink@packages+ink)(react@19.2.3):
+    dependencies:
+      ink: link:packages/ink
+      react: 19.2.3
 
   ink-testing-library@3.0.0(@types/react@19.2.7):
     optionalDependencies:
