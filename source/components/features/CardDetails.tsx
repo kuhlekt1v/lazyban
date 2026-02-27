@@ -176,7 +176,7 @@ const CardView = ({boardName, card}: CardViewProps) => {
 			{/* Description with ScrollView */}
 			<Box width="100%" flexDirection="column" marginTop={1} flexShrink={0}>
 				<Text bold>Description:</Text>
-				{/* @ts-ignore */}
+				{/* @ts-ignore - React 19 JSX type incompatibility with ink components */}
 				<ScrollBarBox
 					width="100%"
 					height={8}
@@ -189,7 +189,7 @@ const CardView = ({boardName, card}: CardViewProps) => {
 					scrollOffset={detailsScrollOffset}
 					scrollBarAutoHide
 				>
-					{/* @ts-ignore */}
+					{/* @ts-ignore - React 19 JSX type incompatibility with ink components */}
 					<ScrollView
 						ref={detailsScrollRef}
 						onScroll={setDetailsScrollOffset}
@@ -215,7 +215,7 @@ const CardView = ({boardName, card}: CardViewProps) => {
 			{/* Comments with ScrollView */}
 			<Box width="100%" flexDirection="column" marginTop={1} flexGrow={1}>
 				<Text bold>Comments ({comments.length}):</Text>
-				{/* @ts-ignore */}
+				{/* @ts-ignore - React 19 JSX type incompatibility with ink components */}
 				<ScrollBarBox
 					width="100%"
 					height={8}
@@ -228,7 +228,7 @@ const CardView = ({boardName, card}: CardViewProps) => {
 					scrollOffset={commentsScrollOffset}
 					scrollBarAutoHide
 				>
-					{/* @ts-ignore */}
+					{/* @ts-ignore - React 19 JSX type incompatibility with ink components */}
 					<ScrollView
 						ref={commentsScrollRef}
 						onScroll={setCommentsScrollOffset}
