@@ -2,97 +2,37 @@ import {useState} from 'react';
 import {Text, useInput} from 'ink';
 import {useTheme} from '../../context/AppContext.js';
 import {COMMANDS} from '../../constants.js';
+import {Command} from '../../core/models.js';
 import Box from '../shared/Box.js';
 
-type Keybinding = {
-	title: string;
-	keys: string[];
-	description: string;
-	category: string;
-};
-
-const keybindings: Keybinding[] = [
-	{
-		title: 'Previous column',
-		keys: ['h', '←'],
-		description:
-			'Move focus to the previous column. Wraps to last column at beginning.',
-		category: 'Column Navigation',
-	},
-	{
-		title: 'Next column',
-		keys: ['l', '→'],
-		description:
-			'Move focus to the next column. Wraps to first column at end.',
-		category: 'Column Navigation',
-	},
-	{
-		title: 'Next card',
-		keys: ['j', '↓'],
-		description:
-			'Move focus to the next card in the current column. Wraps to first card at bottom.',
-		category: 'Card Navigation',
-	},
-	{
-		title: 'Previous card',
-		keys: ['k', '↑'],
-		description:
-			'Move focus to the previous card in the current column. Wraps to last card at top.',
-		category: 'Card Navigation',
-	},
-	{
-		title: 'First card in column',
-		keys: ['gg'],
-		description: 'Jump to the first card in the current column.',
-		category: 'Card Navigation',
-	},
-	{
-		title: 'Last card in column',
-		keys: ['G'],
-		description: 'Jump to the last card in the current column.',
-		category: 'Card Navigation',
-	},
-	{
-		title: 'Next group of cards',
-		keys: ['PgDn'],
-		description: 'Scroll down to the next group of visible cards.',
-		category: 'Card Navigation',
-	},
-	{
-		title: 'Previous group of cards',
-		keys: ['PgUp'],
-		description: 'Scroll up to the previous group of visible cards.',
-		category: 'Card Navigation',
-	},
-	{
-		title: 'View card details',
-		keys: ['Enter'],
-		description: 'Open detailed view of the selected card.',
-		category: 'Card Actions',
-	},
-	{
-		title: 'Toggle this help menu',
-		keys: ['?'],
-		description: 'Show or hide the help menu with keybindings.',
-		category: 'General',
-	},
-	{
-		title: 'Quit',
-		keys: ['q'],
-		description: 'Clear terminal and quit application.',
-		category: 'General',
-	},
-];
-
 const KeybindingRow = ({
-	keybinding,
+	command,
 	isActive,
 }: {
-	keybinding: Keybinding;
+	command: Command;
 	isActive: boolean;
 }) => {
 	const theme = useTheme();
-	const keysDisplay = keybinding.keys.join(', ');
+
+	// Map special keys to symbols
+	const keyToSymbol = (key: string): string => {
+		switch (key) {
+			case 'leftArrow':
+				return '←';
+			case 'rightArrow':
+				return '→';
+			case 'upArrow':
+				return '↑';
+			case 'downArrow':
+				return '↓';
+			case 'return':
+				return 'Enter';
+			default:
+				return key;
+		}
+	};
+
+	const keysDisplay = command.keys.map(keyToSymbol).join(', ');
 
 	return (
 		<Box
@@ -107,7 +47,7 @@ const KeybindingRow = ({
 				<Text bold color={theme.PRIMARY}>
 					{keysDisplay.padEnd(12)}
 				</Text>
-				<Text>{keybinding.title}</Text>
+				<Text>{command.title}</Text>
 			</Box>
 		</Box>
 	);
@@ -117,26 +57,29 @@ const HelpMenu = () => {
 	const theme = useTheme();
 	const [activeIndex, setActiveIndex] = useState(0);
 
-	// Group keybindings by category
-	const groupedKeybindings: {[key: string]: Keybinding[]} = {};
-	keybindings.forEach(kb => {
-		if (!groupedKeybindings[kb.category]) {
-			groupedKeybindings[kb.category] = [];
+	// Get all commands (including those with display: false)
+	const allCommands = COMMANDS;
+
+	// Group commands by category
+	const groupedCommands: {[key: string]: Command[]} = {};
+	allCommands.forEach(cmd => {
+		if (!groupedCommands[cmd.category]) {
+			groupedCommands[cmd.category] = [];
 		}
-		groupedKeybindings[kb.category].push(kb);
+		groupedCommands[cmd.category].push(cmd);
 	});
 
 	useInput((input, key) => {
 		if (key.downArrow || input === 'j') {
-			setActiveIndex(prev => (prev + 1) % keybindings.length);
+			setActiveIndex(prev => (prev + 1) % allCommands.length);
 		} else if (key.upArrow || input === 'k') {
 			setActiveIndex(
-				prev => (prev - 1 + keybindings.length) % keybindings.length,
+				prev => (prev - 1 + allCommands.length) % allCommands.length,
 			);
 		}
 	});
 
-	const activeKeybinding = keybindings[activeIndex];
+	const activeCommand = allCommands[activeIndex];
 
 	return (
 		<Box width="100%" height="100%" flexDirection="column" marginX={1}>
@@ -157,19 +100,19 @@ const HelpMenu = () => {
 
 			{/* Main scrollable content */}
 			<Box width="100%" flexDirection="column" flexGrow={1} overflow="hidden">
-				{Object.entries(groupedKeybindings).map(([category, kbs], catIndex) => (
+				{Object.entries(groupedCommands).map(([category, cmds], catIndex) => (
 					<Box key={category} width="100%" flexDirection="column">
 						{/* Category header */}
 						<Box width="100%" marginTop={catIndex > 0 ? 1 : 0}>
 							<Text dimColor>─── {category} ───</Text>
 						</Box>
-						{/* Keybindings in this category */}
-						{kbs.map((kb, kbIndex) => {
-							const globalIndex = keybindings.indexOf(kb);
+						{/* Commands in this category */}
+						{cmds.map((cmd, cmdIndex) => {
+							const globalIndex = allCommands.indexOf(cmd);
 							return (
 								<KeybindingRow
-									key={`${category}-${kbIndex}`}
-									keybinding={kb}
+									key={`${category}-${cmdIndex}`}
+									command={cmd}
 									isActive={globalIndex === activeIndex}
 								/>
 							);
@@ -189,7 +132,7 @@ const HelpMenu = () => {
 					minHeight={4}
 				>
 					<Text bold>Description:</Text>
-					<Text wrap="wrap">{activeKeybinding.description}</Text>
+					<Text wrap="wrap">{activeCommand.description}</Text>
 				</Box>
 			</Box>
 

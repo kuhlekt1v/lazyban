@@ -27,7 +27,7 @@ const Keybindings = () => {
 		else if (key.upArrow) trigger = 'upArrow';
 		else if (key.return) trigger = 'return';
 
-		const cmd = COMMANDS.find(c => c.input.includes(trigger));
+		const cmd = COMMANDS.find(c => c.keys.includes(trigger));
 		addStatement('Pressed', trigger);
 
 		if (cmd) {
@@ -86,9 +86,9 @@ const Keybindings = () => {
 							return input;
 					}
 				};
-				let inputDisplay = Array.isArray(command.input)
-					? command.input.map(inputToIcon).join(',')
-					: inputToIcon(command.input);
+				let inputDisplay = Array.isArray(command.keys)
+					? command.keys.map(inputToIcon).join(',')
+					: inputToIcon(command.keys);
 				let title = `${inputDisplay}: ${command.title}`;
 				if (index + 1 !== displayedCommands.length) title = `${title} | `;
 				return (
