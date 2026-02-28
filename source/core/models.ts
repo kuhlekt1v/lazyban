@@ -56,8 +56,9 @@ export interface Card {
 
 export interface Command {
 	title: string;
-	input: string[];
+	keys: string[];
 	action: string;
 	description: string;
+	category: string;
 	display: boolean;
 }

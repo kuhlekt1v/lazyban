@@ -33,6 +33,9 @@ type Action =
 	| {
 			type: typeof FOCUS_ACTION.CLOSE_OVERLAY;
 			payload: {overlay: keyof typeof OVERLAY_TYPE};
+	  }
+	| {
+			type: typeof FOCUS_ACTION.OPEN_HELP_MENU;
 	  };
 
 export interface FocusState {
@@ -54,6 +57,7 @@ interface FocusContextValue {
 	prevCard: () => void;
 	expandCard: (cardId: Board) => void;
 	closeOverlay: (type: keyof typeof OVERLAY_TYPE) => void;
+	openHelpMenu: () => void;
 }
 
 const initialState: FocusState = {
@@ -136,6 +140,10 @@ const reducer = (state: FocusState, action: Action): FocusState => {
 			return state;
 		}
 
+		case FOCUS_ACTION.OPEN_HELP_MENU: {
+			return {...state, helpMenuOpen: true};
+		}
+
 		default:
 			return state;
 	}
@@ -150,6 +158,7 @@ const FocusContext = createContext<FocusContextValue>({
 	prevCard: () => {},
 	expandCard: () => {},
 	closeOverlay: (_type: keyof typeof OVERLAY_TYPE) => {},
+	openHelpMenu: () => {},
 });
 
 export const FocusProvider = ({children}: {children: ReactNode}) => {
@@ -211,6 +220,11 @@ export const FocusProvider = ({children}: {children: ReactNode}) => {
 			payload: {overlay: type},
 		});
 
+	const openHelpMenu = () =>
+		dispatch({
+			type: FOCUS_ACTION.OPEN_HELP_MENU,
+		});
+
 	return (
 		// @ts-ignore
 		<FocusContext.Provider
@@ -223,6 +237,7 @@ export const FocusProvider = ({children}: {children: ReactNode}) => {
 				prevCard,
 				expandCard,
 				closeOverlay,
+				openHelpMenu,
 			}}
 		>
 			{children}
