@@ -7,6 +7,7 @@ import {Board, ID} from '../core/models.js';
 export const OVERLAY_TYPE = {
 	DETAIL: 'DETAIL',
 	HELP: 'HELP',
+	QUIT: 'QUIT',
 } as const;
 
 type Action =
@@ -33,6 +34,9 @@ type Action =
 	| {
 			type: typeof FOCUS_ACTION.CLOSE_OVERLAY;
 			payload: {overlay: keyof typeof OVERLAY_TYPE};
+	  }
+	| {
+			type: typeof FOCUS_ACTION.SHOW_QUIT_PROMPT;
 	  };
 
 export interface FocusState {
@@ -43,6 +47,7 @@ export interface FocusState {
 	};
 	cardDetailOpen: boolean;
 	helpMenuOpen: boolean;
+	quitPromptOpen: boolean;
 }
 
 interface FocusContextValue {
@@ -54,12 +59,14 @@ interface FocusContextValue {
 	prevCard: () => void;
 	expandCard: (cardId: Board) => void;
 	closeOverlay: (type: keyof typeof OVERLAY_TYPE) => void;
+	showQuitPrompt: () => void;
 }
 
 const initialState: FocusState = {
 	active: {columnIndex: 0, cardIndex: 0, cardId: undefined},
 	cardDetailOpen: false,
 	helpMenuOpen: false,
+	quitPromptOpen: false,
 };
 function wrap(index: number, count: number) {
 	if (count <= 0) return 0;
@@ -133,7 +140,14 @@ const reducer = (state: FocusState, action: Action): FocusState => {
 			if (overlay === 'HELP') {
 				return {...state, helpMenuOpen: false};
 			}
+			if (overlay === 'QUIT') {
+				return {...state, quitPromptOpen: false};
+			}
 			return state;
+		}
+
+		case FOCUS_ACTION.SHOW_QUIT_PROMPT: {
+			return {...state, quitPromptOpen: true};
 		}
 
 		default:
@@ -150,6 +164,7 @@ const FocusContext = createContext<FocusContextValue>({
 	prevCard: () => {},
 	expandCard: () => {},
 	closeOverlay: (_type: keyof typeof OVERLAY_TYPE) => {},
+	showQuitPrompt: () => {},
 });
 
 export const FocusProvider = ({children}: {children: ReactNode}) => {
@@ -211,6 +226,11 @@ export const FocusProvider = ({children}: {children: ReactNode}) => {
 			payload: {overlay: type},
 		});
 
+	const showQuitPrompt = () =>
+		dispatch({
+			type: FOCUS_ACTION.SHOW_QUIT_PROMPT,
+		});
+
 	return (
 		// @ts-ignore
 		<FocusContext.Provider
@@ -223,6 +243,7 @@ export const FocusProvider = ({children}: {children: ReactNode}) => {
 				prevCard,
 				expandCard,
 				closeOverlay,
+				showQuitPrompt,
 			}}
 		>
 			{children}

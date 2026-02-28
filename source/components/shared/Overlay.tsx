@@ -5,11 +5,17 @@ import {OVERLAY_TYPE, useFocus} from '../../context/FocusContext.js';
 import {ReactNode} from 'react';
 
 type OverlayProps = {
-	height: number;
-	width: number;
+	height?: number;
+	width?: number;
 	children: ReactNode;
+	overlayType: keyof typeof OVERLAY_TYPE;
 };
-const Overlay = ({height = 50, width = 50, children}: OverlayProps) => {
+const Overlay = ({
+	height = 50,
+	width = 50,
+	overlayType,
+	children,
+}: OverlayProps) => {
 	const theme = useTheme();
 	const heightPercent = `${height}%`;
 	const widthPercent = `${width}%`;
@@ -19,7 +25,7 @@ const Overlay = ({height = 50, width = 50, children}: OverlayProps) => {
 	useInput((_, key) => {
 		if (key.escape) {
 			focus('board');
-			closeOverlay(OVERLAY_TYPE.DETAIL);
+			closeOverlay(overlayType);
 		}
 	});
 
