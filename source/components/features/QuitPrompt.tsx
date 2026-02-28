@@ -1,4 +1,5 @@
-import {Box, Text, useInput} from 'ink';
+import {Box} from '../shared/index.js';
+import {Text, useInput} from 'ink';
 import {useApp, useTheme} from '../../context/AppContext.js';
 import {OVERLAY_TYPE, useFocus} from '../../context/FocusContext.js';
 import {useFocusManager} from 'ink';
@@ -22,23 +23,15 @@ const QuitPrompt = () => {
 	});
 
 	return (
-		// @ts-ignore
 		<Box
 			flexDirection="column"
-			alignItems="center"
 			justifyContent="center"
+			width="100%"
 			height="100%"
+			marginX={1}
 		>
-			{/* @ts-ignore */}
-			<Box flexDirection="column" alignItems="center">
-				<Text color={theme.ALT_HIGHLIGHT}>
-					Are you sure you want to quit?
-				</Text>
-				{/* @ts-ignore */}
-				<Box marginTop={1}>
-					<Text dimColor>Press [q] again to quit or any other key to cancel.</Text>
-				</Box>
-			</Box>
+			<Text color={theme.ALT_HIGHLIGHT}>Are you sure you want to quit?</Text>
+			<Text dimColor>Press [q] again to quit or any other key to cancel.</Text>
 		</Box>
 	);
 };

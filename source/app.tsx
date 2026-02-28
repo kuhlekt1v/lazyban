@@ -26,7 +26,7 @@ export default function App() {
 			id: 'quit-prompt',
 			component: QuitPrompt,
 			height: 20,
-			width: 60,
+			width: 35,
 		},
 	];
 
