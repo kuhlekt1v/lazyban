@@ -1,0 +1,128 @@
+---
+interface Props {
+	title: string;
+	description?: string;
+}
+
+const {
+	title,
+	description = "Lazyban - Lazygit for work tracking. Terminal-first kanban board for Jira, Linear, and more."
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content={description} />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+
+		<!-- SEO Meta Tags -->
+		<meta name="keywords" content="kanban, terminal, cli, jira, linear, productivity, keyboard-driven" />
+		<meta name="author" content="Lazyban" />
+
+		<!-- Open Graph / Facebook -->
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+
+		<!-- Twitter -->
+		<meta property="twitter:card" content="summary_large_image" />
+		<meta property="twitter:title" content={title} />
+		<meta property="twitter:description" content={description} />
+
+		<title>{title}</title>
+	</head>
+	<body>
+		<slot />
+	</body>
+</html>
+
+<style is:global>
+	:root {
+		/* GitArbor inspired colors */
+		--color-primary: #cc8844;
+		--color-primary-dark: #bb7733;
+		--color-bg-primary: #000000;
+		--color-bg-secondary: #1a1a1a;
+		--color-bg-highlight: #2a2520;
+		--color-bg-card: #1a1a1a;
+		--color-text-primary: #ffffff;
+		--color-text-secondary: #cccccc;
+		--color-text-muted: #999999;
+		--color-border: #555555;
+		--color-border-focused: #cc8844;
+
+		/* Lazyban brand colors */
+		--color-lazyban-primary: #79A0C9;
+		--color-lazyban-secondary: #EAEBF2;
+		--color-lazyban-highlight: #A3D9A5;
+		--color-lazyban-alt-highlight: #D6C8FF;
+		--color-lazyban-yellow: #FFF9C4;
+		--color-lazyban-orange: #F6B26B;
+		--color-lazyban-red: #E06666;
+
+		/* Spacing */
+		--spacing-xs: 0.5rem;
+		--spacing-sm: 1rem;
+		--spacing-md: 1.5rem;
+		--spacing-lg: 2rem;
+		--spacing-xl: 3rem;
+		--spacing-2xl: 4rem;
+		--spacing-3xl: 6rem;
+
+		/* Typography */
+		--font-mono: "JetBrains Mono", "Fira Code", "Consolas", "Monaco", monospace;
+		--font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+		/* Border Radius */
+		--radius-sm: 0.25rem;
+		--radius-md: 0.5rem;
+		--radius-lg: 1rem;
+
+		/* Shadows */
+		--shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+		--shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);
+		--shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.6);
+	}
+
+	* {
+		box-sizing: border-box;
+		margin: 0;
+		padding: 0;
+	}
+
+	html {
+		font-family: var(--font-sans);
+		background: var(--color-bg-primary);
+		color: var(--color-text-primary);
+		scroll-behavior: smooth;
+	}
+
+	body {
+		line-height: 1.6;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
+
+	code, pre {
+		font-family: var(--font-mono);
+	}
+
+	a {
+		color: var(--color-lazyban-primary);
+		text-decoration: none;
+		transition: color 0.2s ease;
+	}
+
+	a:hover {
+		color: var(--color-primary);
+	}
+
+	::selection {
+		background: var(--color-lazyban-primary);
+		color: var(--color-bg-primary);
+	}
+</style>

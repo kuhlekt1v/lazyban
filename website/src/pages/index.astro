@@ -1,0 +1,762 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Lazyban - Terminal Kanban for Modern Teams">
+	<main>
+		<!-- Hero Section -->
+		<section class="hero">
+			<div class="container">
+				<pre class="logo" aria-label="Lazyban">
+██╗      █████╗ ███████╗██╗   ██╗██████╗  █████╗ ███╗   ██╗
+██║     ██╔══██╗╚══███╔╝╚██╗ ██╔╝██╔══██╗██╔══██╗████╗  ██║
+██║     ███████║  ███╔╝  ╚████╔╝ ██████╔╝███████║██╔██╗ ██║
+██║     ██╔══██║ ███╔╝    ╚██╔╝  ██╔══██╗██╔══██║██║╚██╗██║
+███████╗██║  ██║███████╗   ██║   ██████╔╝██║  ██║██║ ╚████║
+╚══════╝╚═╝  ╚═╝╚══════╝   ╚═╝   ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═══╝</pre>
+				<h1 class="tagline">Lazygit for work tracking</h1>
+				<p class="subtitle">
+					Terminal-first kanban board designed to be your universal command center.
+					One board, any backend.
+				</p>
+				<div class="hero-actions">
+					<a href="#getting-started" class="btn btn-primary">Get Started</a>
+					<a href="https://github.com/kuhlekt1v/lazyban" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">
+						<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+							<path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+						</svg>
+						View on GitHub
+					</a>
+				</div>
+				<div class="hero-demo">
+					<img src="https://raw.githubusercontent.com/kuhlekt1v/lazyban/main/.github/assets/boardctl-mvp.png" alt="Lazyban terminal interface showing kanban board" loading="eager" />
+				</div>
+			</div>
+		</section>
+
+		<!-- Features Section -->
+		<section class="features">
+			<div class="container">
+				<h2 class="section-title">Philosophy</h2>
+				<p class="section-subtitle">
+					Inspired by tools like <strong>lazygit</strong> and <strong>k9s</strong>,
+					Lazyban brings the same terminal-first philosophy to kanban workflows
+				</p>
+				<div class="features-grid">
+					<div class="feature-card">
+						<div class="feature-icon">⚡</div>
+						<h3>Fast</h3>
+						<p>Keyboard-driven, zero mouse dependency. Navigate your board at the speed of thought with vim-style keybindings.</p>
+					</div>
+					<div class="feature-card">
+						<div class="feature-icon">🎯</div>
+						<h3>Focused</h3>
+						<p>One interface, no browser tabs. Stay in your terminal and in your flow state.</p>
+					</div>
+					<div class="feature-card">
+						<div class="feature-icon">🔌</div>
+						<h3>Flexible</h3>
+						<p>Works with your existing tools via content strategies. Jira, Linear, local files – same interface.</p>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Current Features -->
+		<section class="current-features">
+			<div class="container">
+				<h2 class="section-title">Current Features</h2>
+				<div class="status-badge mvp">MVP in Active Development</div>
+				<ul class="feature-list">
+					<li>✓ Terminal-native kanban board UI</li>
+					<li>✓ Column and card navigation with vim-style keybindings</li>
+					<li>✓ Card scrolling with position indicators</li>
+					<li>✓ Responsive layout for terminal resizing</li>
+				</ul>
+			</div>
+		</section>
+
+		<!-- Getting Started -->
+		<section id="getting-started" class="getting-started">
+			<div class="container">
+				<h2 class="section-title">Getting Started</h2>
+				<p class="section-subtitle">Try the latest development version</p>
+				<div class="code-block">
+					<pre><code>pnpm install
+pnpm run start      # Launch Lazyban
+pnpm run dev        # Watch mode for development
+pnpm run debug      # Debug mode with console output</code></pre>
+				</div>
+				<div class="keybindings">
+					<h3>Keybindings</h3>
+					<table>
+						<thead>
+							<tr>
+								<th>Key</th>
+								<th>Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><kbd>h</kbd>, <kbd>←</kbd></td>
+								<td>Previous column</td>
+							</tr>
+							<tr>
+								<td><kbd>l</kbd>, <kbd>→</kbd></td>
+								<td>Next column</td>
+							</tr>
+							<tr>
+								<td><kbd>j</kbd>, <kbd>↓</kbd></td>
+								<td>Next card in column</td>
+							</tr>
+							<tr>
+								<td><kbd>k</kbd>, <kbd>↑</kbd></td>
+								<td>Previous card in column</td>
+							</tr>
+							<tr>
+								<td><kbd>q</kbd></td>
+								<td>Quit</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class="muted">Full keybinding reference coming with help menu (<kbd>?</kbd>) feature</p>
+				</div>
+			</div>
+		</section>
+
+		<!-- Roadmap -->
+		<section class="roadmap">
+			<div class="container">
+				<h2 class="section-title">Roadmap</h2>
+				<div class="roadmap-timeline">
+					<div class="roadmap-item completed">
+						<div class="roadmap-marker"></div>
+						<div class="roadmap-content">
+							<h3>Core Foundation</h3>
+							<ul>
+								<li>✓ Core UI and layout</li>
+								<li>✓ Column/card navigation</li>
+								<li>✓ Card scrolling with indicators</li>
+							</ul>
+						</div>
+					</div>
+					<div class="roadmap-item current">
+						<div class="roadmap-marker"></div>
+						<div class="roadmap-content">
+							<h3>MVP Release</h3>
+							<ul>
+								<li>Card details view</li>
+								<li>Help menu</li>
+								<li>Enhanced navigation shortcuts</li>
+								<li>Card sorting/filtering</li>
+								<li>Local file-based strategy</li>
+								<li>Card movement</li>
+							</ul>
+						</div>
+					</div>
+					<div class="roadmap-item future">
+						<div class="roadmap-marker"></div>
+						<div class="roadmap-content">
+							<h3>Post-MVP</h3>
+							<ul>
+								<li>Jira integration</li>
+								<li>Card CRUD operations</li>
+								<li>Additional backend providers (Linear, Azure, Zenhub)</li>
+								<li>User identity and card ownership</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Architecture -->
+		<section class="architecture">
+			<div class="container">
+				<h2 class="section-title">Architecture</h2>
+				<p class="section-subtitle">
+					Lazyban uses a <strong>Strategy Pattern</strong> to support multiple kanban backends through a unified interface
+				</p>
+				<div class="architecture-diagram">
+					<div class="arch-box">
+						<h4>Client</h4>
+						<p>Bootstrap & UI</p>
+					</div>
+					<div class="arch-arrow">→</div>
+					<div class="arch-box">
+						<h4>KanbanService</h4>
+						<p>Strategy Context</p>
+					</div>
+					<div class="arch-arrow">→</div>
+					<div class="arch-box interface">
+						<h4>KanbanStrategy</h4>
+						<p>Interface</p>
+					</div>
+					<div class="arch-implementations">
+						<div class="arch-impl">Local</div>
+						<div class="arch-impl">Jira</div>
+						<div class="arch-impl">Linear</div>
+						<div class="arch-impl">Azure</div>
+					</div>
+				</div>
+				<p class="muted">Each content strategy implements the same interface, allowing you to switch backends without changing your workflow.</p>
+			</div>
+		</section>
+
+		<!-- Footer -->
+		<footer class="footer">
+			<div class="container">
+				<div class="footer-content">
+					<div class="footer-section">
+						<h4>Lazyban</h4>
+						<p>Terminal-first kanban board for modern teams</p>
+					</div>
+					<div class="footer-section">
+						<h4>Links</h4>
+						<ul>
+							<li><a href="https://github.com/kuhlekt1v/lazyban" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+							<li><a href="https://github.com/kuhlekt1v/lazyban/issues" target="_blank" rel="noopener noreferrer">Issues</a></li>
+						</ul>
+					</div>
+					<div class="footer-section">
+						<h4>Project</h4>
+						<ul>
+							<li><a href="#getting-started">Getting Started</a></li>
+							<li><a href="#roadmap">Roadmap</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="footer-bottom">
+					<p>Built with <a href="https://github.com/vadimdemedes/ink" target="_blank" rel="noopener noreferrer">Ink</a> and TypeScript</p>
+					<p>MIT License © 2024</p>
+				</div>
+			</div>
+		</footer>
+	</main>
+</Layout>
+
+<style>
+	main {
+		width: 100%;
+	}
+
+	.container {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 0 var(--spacing-lg);
+	}
+
+	/* Hero Section */
+	.hero {
+		min-height: 100vh;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		text-align: center;
+		padding: var(--spacing-3xl) 0;
+		background: linear-gradient(180deg, var(--color-bg-primary) 0%, var(--color-bg-secondary) 100%);
+	}
+
+	.logo {
+		font-size: clamp(0.4rem, 1.5vw, 0.85rem);
+		color: var(--color-lazyban-primary);
+		font-weight: bold;
+		margin-bottom: var(--spacing-lg);
+		line-height: 1.2;
+		text-shadow: 0 0 20px rgba(121, 160, 201, 0.3);
+		overflow-x: auto;
+	}
+
+	.tagline {
+		font-size: clamp(1.5rem, 4vw, 3rem);
+		font-weight: 700;
+		margin-bottom: var(--spacing-md);
+		color: var(--color-text-primary);
+	}
+
+	.subtitle {
+		font-size: clamp(1rem, 2vw, 1.5rem);
+		color: var(--color-text-secondary);
+		max-width: 700px;
+		margin: 0 auto var(--spacing-xl);
+		line-height: 1.6;
+	}
+
+	.hero-actions {
+		display: flex;
+		gap: var(--spacing-md);
+		margin-bottom: var(--spacing-2xl);
+		flex-wrap: wrap;
+		justify-content: center;
+	}
+
+	.btn {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--spacing-xs);
+		padding: var(--spacing-md) var(--spacing-xl);
+		border-radius: var(--radius-md);
+		font-weight: 600;
+		font-size: 1.1rem;
+		transition: all 0.2s ease;
+		border: 2px solid transparent;
+	}
+
+	.btn-primary {
+		background: var(--color-lazyban-primary);
+		color: var(--color-bg-primary);
+	}
+
+	.btn-primary:hover {
+		background: var(--color-primary);
+		transform: translateY(-2px);
+		box-shadow: var(--shadow-md);
+	}
+
+	.btn-secondary {
+		background: transparent;
+		color: var(--color-text-primary);
+		border-color: var(--color-border);
+	}
+
+	.btn-secondary:hover {
+		border-color: var(--color-lazyban-primary);
+		background: rgba(121, 160, 201, 0.1);
+	}
+
+	.hero-demo {
+		max-width: 900px;
+		margin: 0 auto;
+		border-radius: var(--radius-lg);
+		overflow: hidden;
+		box-shadow: var(--shadow-lg);
+		border: 1px solid var(--color-border);
+	}
+
+	.hero-demo img {
+		width: 100%;
+		height: auto;
+		display: block;
+	}
+
+	/* Features Section */
+	.features {
+		padding: var(--spacing-3xl) 0;
+		background: var(--color-bg-secondary);
+	}
+
+	.section-title {
+		font-size: clamp(2rem, 4vw, 3rem);
+		font-weight: 700;
+		text-align: center;
+		margin-bottom: var(--spacing-md);
+		color: var(--color-text-primary);
+	}
+
+	.section-subtitle {
+		text-align: center;
+		font-size: 1.2rem;
+		color: var(--color-text-secondary);
+		max-width: 700px;
+		margin: 0 auto var(--spacing-2xl);
+	}
+
+	.features-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+		gap: var(--spacing-xl);
+		margin-top: var(--spacing-2xl);
+	}
+
+	.feature-card {
+		background: var(--color-bg-card);
+		padding: var(--spacing-xl);
+		border-radius: var(--radius-lg);
+		border: 1px solid var(--color-border);
+		transition: all 0.3s ease;
+	}
+
+	.feature-card:hover {
+		border-color: var(--color-lazyban-primary);
+		box-shadow: var(--shadow-md);
+		transform: translateY(-4px);
+	}
+
+	.feature-icon {
+		font-size: 3rem;
+		margin-bottom: var(--spacing-md);
+	}
+
+	.feature-card h3 {
+		font-size: 1.5rem;
+		margin-bottom: var(--spacing-sm);
+		color: var(--color-lazyban-primary);
+	}
+
+	.feature-card p {
+		color: var(--color-text-secondary);
+		line-height: 1.6;
+	}
+
+	/* Current Features */
+	.current-features {
+		padding: var(--spacing-3xl) 0;
+		background: var(--color-bg-primary);
+	}
+
+	.status-badge {
+		display: inline-block;
+		padding: var(--spacing-xs) var(--spacing-md);
+		border-radius: var(--radius-sm);
+		font-weight: 600;
+		margin: var(--spacing-md) auto var(--spacing-xl);
+		text-align: center;
+		display: block;
+		width: fit-content;
+	}
+
+	.status-badge.mvp {
+		background: rgba(163, 217, 165, 0.2);
+		color: var(--color-lazyban-highlight);
+		border: 1px solid var(--color-lazyban-highlight);
+	}
+
+	.feature-list {
+		list-style: none;
+		max-width: 600px;
+		margin: 0 auto;
+		font-size: 1.2rem;
+	}
+
+	.feature-list li {
+		padding: var(--spacing-sm) 0;
+		color: var(--color-text-secondary);
+		border-bottom: 1px solid rgba(85, 85, 85, 0.3);
+	}
+
+	.feature-list li:last-child {
+		border-bottom: none;
+	}
+
+	/* Getting Started */
+	.getting-started {
+		padding: var(--spacing-3xl) 0;
+		background: var(--color-bg-secondary);
+	}
+
+	.code-block {
+		background: var(--color-bg-primary);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-md);
+		padding: var(--spacing-lg);
+		margin: var(--spacing-xl) auto;
+		max-width: 700px;
+		overflow-x: auto;
+	}
+
+	.code-block pre {
+		margin: 0;
+	}
+
+	.code-block code {
+		color: var(--color-lazyban-highlight);
+		font-size: 1rem;
+		line-height: 1.8;
+	}
+
+	.keybindings {
+		max-width: 700px;
+		margin: var(--spacing-2xl) auto 0;
+	}
+
+	.keybindings h3 {
+		font-size: 1.8rem;
+		margin-bottom: var(--spacing-lg);
+		text-align: center;
+	}
+
+	.keybindings table {
+		width: 100%;
+		border-collapse: collapse;
+		background: var(--color-bg-card);
+		border-radius: var(--radius-md);
+		overflow: hidden;
+	}
+
+	.keybindings thead {
+		background: var(--color-bg-highlight);
+	}
+
+	.keybindings th,
+	.keybindings td {
+		padding: var(--spacing-md);
+		text-align: left;
+		border-bottom: 1px solid var(--color-border);
+	}
+
+	.keybindings tbody tr:last-child td {
+		border-bottom: none;
+	}
+
+	.keybindings tbody tr:hover {
+		background: var(--color-bg-highlight);
+	}
+
+	kbd {
+		display: inline-block;
+		padding: 0.2rem 0.5rem;
+		background: var(--color-bg-primary);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-sm);
+		font-family: var(--font-mono);
+		font-size: 0.9em;
+		color: var(--color-lazyban-primary);
+		margin: 0 0.2rem;
+	}
+
+	.muted {
+		color: var(--color-text-muted);
+		font-size: 0.9rem;
+		text-align: center;
+		margin-top: var(--spacing-md);
+	}
+
+	/* Roadmap */
+	.roadmap {
+		padding: var(--spacing-3xl) 0;
+		background: var(--color-bg-primary);
+	}
+
+	.roadmap-timeline {
+		max-width: 800px;
+		margin: var(--spacing-2xl) auto 0;
+		position: relative;
+	}
+
+	.roadmap-timeline::before {
+		content: '';
+		position: absolute;
+		left: 20px;
+		top: 0;
+		bottom: 0;
+		width: 2px;
+		background: var(--color-border);
+	}
+
+	.roadmap-item {
+		position: relative;
+		padding-left: 60px;
+		margin-bottom: var(--spacing-2xl);
+	}
+
+	.roadmap-marker {
+		position: absolute;
+		left: 12px;
+		top: 8px;
+		width: 18px;
+		height: 18px;
+		border-radius: 50%;
+		background: var(--color-bg-secondary);
+		border: 3px solid var(--color-border);
+	}
+
+	.roadmap-item.completed .roadmap-marker {
+		background: var(--color-lazyban-highlight);
+		border-color: var(--color-lazyban-highlight);
+	}
+
+	.roadmap-item.current .roadmap-marker {
+		background: var(--color-lazyban-primary);
+		border-color: var(--color-lazyban-primary);
+		box-shadow: 0 0 20px rgba(121, 160, 201, 0.5);
+	}
+
+	.roadmap-content {
+		background: var(--color-bg-card);
+		padding: var(--spacing-lg);
+		border-radius: var(--radius-md);
+		border: 1px solid var(--color-border);
+	}
+
+	.roadmap-item.current .roadmap-content {
+		border-color: var(--color-lazyban-primary);
+	}
+
+	.roadmap-content h3 {
+		font-size: 1.5rem;
+		margin-bottom: var(--spacing-md);
+		color: var(--color-text-primary);
+	}
+
+	.roadmap-content ul {
+		list-style: none;
+	}
+
+	.roadmap-content li {
+		padding: var(--spacing-xs) 0;
+		color: var(--color-text-secondary);
+	}
+
+	/* Architecture */
+	.architecture {
+		padding: var(--spacing-3xl) 0;
+		background: var(--color-bg-secondary);
+	}
+
+	.architecture-diagram {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: center;
+		gap: var(--spacing-md);
+		margin: var(--spacing-2xl) auto;
+		max-width: 900px;
+	}
+
+	.arch-box {
+		background: var(--color-bg-card);
+		border: 2px solid var(--color-border);
+		border-radius: var(--radius-md);
+		padding: var(--spacing-lg);
+		min-width: 180px;
+		text-align: center;
+	}
+
+	.arch-box.interface {
+		border-color: var(--color-lazyban-primary);
+	}
+
+	.arch-box h4 {
+		font-size: 1.2rem;
+		margin-bottom: var(--spacing-xs);
+		color: var(--color-text-primary);
+	}
+
+	.arch-box p {
+		color: var(--color-text-muted);
+		font-size: 0.9rem;
+	}
+
+	.arch-arrow {
+		font-size: 2rem;
+		color: var(--color-lazyban-primary);
+	}
+
+	.arch-implementations {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--spacing-sm);
+		justify-content: center;
+		width: 100%;
+		margin-top: var(--spacing-md);
+	}
+
+	.arch-impl {
+		background: var(--color-bg-highlight);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-sm);
+		padding: var(--spacing-sm) var(--spacing-md);
+		color: var(--color-text-secondary);
+		font-size: 0.9rem;
+	}
+
+	/* Footer */
+	.footer {
+		background: var(--color-bg-primary);
+		padding: var(--spacing-2xl) 0 var(--spacing-lg);
+		border-top: 1px solid var(--color-border);
+	}
+
+	.footer-content {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+		gap: var(--spacing-xl);
+		margin-bottom: var(--spacing-xl);
+	}
+
+	.footer-section h4 {
+		font-size: 1.2rem;
+		margin-bottom: var(--spacing-md);
+		color: var(--color-text-primary);
+	}
+
+	.footer-section p {
+		color: var(--color-text-muted);
+		line-height: 1.6;
+	}
+
+	.footer-section ul {
+		list-style: none;
+	}
+
+	.footer-section li {
+		margin-bottom: var(--spacing-xs);
+	}
+
+	.footer-section a {
+		color: var(--color-text-secondary);
+	}
+
+	.footer-section a:hover {
+		color: var(--color-lazyban-primary);
+	}
+
+	.footer-bottom {
+		text-align: center;
+		padding-top: var(--spacing-lg);
+		border-top: 1px solid rgba(85, 85, 85, 0.3);
+		color: var(--color-text-muted);
+	}
+
+	.footer-bottom p {
+		margin: var(--spacing-xs) 0;
+	}
+
+	/* Responsive */
+	@media (max-width: 768px) {
+		.container {
+			padding: 0 var(--spacing-md);
+		}
+
+		.hero {
+			min-height: auto;
+			padding: var(--spacing-2xl) 0;
+		}
+
+		.logo {
+			font-size: 0.35rem;
+		}
+
+		.hero-actions {
+			flex-direction: column;
+			width: 100%;
+		}
+
+		.btn {
+			width: 100%;
+			justify-content: center;
+		}
+
+		.features-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.architecture-diagram {
+			flex-direction: column;
+		}
+
+		.arch-arrow {
+			transform: rotate(90deg);
+		}
+
+		.keybindings table {
+			font-size: 0.9rem;
+		}
+
+		.keybindings th,
+		.keybindings td {
+			padding: var(--spacing-sm);
+		}
+	}
+</style>
