@@ -20,10 +20,12 @@
 	"dependencies": {
 		"ansi-escapes": "^7.2.0",
 		"ink": "workspace:*",
+		"js-yaml": "^4.1.1",
 		"react": "^19.2.3"
 	},
 	"devDependencies": {
 		"@sindresorhus/tsconfig": "^3.0.1",
+		"@types/js-yaml": "^4.0.9",
 		"@types/node": "^25.0.3",
 		"@types/react": "^19.2.7",
 		"@vdemedes/prettier-config": "^2.0.1",

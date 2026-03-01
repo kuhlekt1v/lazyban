@@ -30,6 +30,15 @@ export interface Column {
 	order: number;
 }
 
+export type Priority = 'low' | 'medium' | 'high';
+
+export interface Comment {
+	author: string;
+	text: string;
+	/** ISO 8601 formatted timestamp */
+	createdAt: string;
+}
+
 export interface Card {
 	id: ID;
 	title: string;
@@ -38,15 +47,18 @@ export interface Card {
 	columnId: ID;
 	assignee?: string;
 	labels?: string[];
-	priority?: 'low' | 'medium' | 'high';
+	priority?: Priority;
 	feature?: string;
 	points?: number;
+	dueDate?: string;
+	comments?: Comment[];
 }
 
 export interface Command {
 	title: string;
-	input: string[];
+	keys: string[];
 	action: string;
 	description: string;
+	category: string;
 	display: boolean;
 }

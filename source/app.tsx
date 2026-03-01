@@ -1,4 +1,9 @@
-import {Board, CardDetails, QuitPrompt} from './components/features/index.js';
+import {
+	Board,
+	CardDetails,
+	HelpMenu,
+	QuitPrompt,
+} from './components/features/index.js';
 import {Box, Overlay} from './components/shared/index.js';
 import {useTheme} from './context/AppContext.js';
 
@@ -27,6 +32,16 @@ export default function App() {
 			component: QuitPrompt,
 			height: 20,
 			width: 35,
+			background: false,
+		},
+		{
+			isOpen: focusState.helpMenuOpen,
+			type: OVERLAY_TYPE.HELP,
+			id: 'help-menu',
+			component: HelpMenu,
+			height: 95,
+			width: 50,
+			background: false,
 		},
 	];
 
@@ -42,7 +57,15 @@ export default function App() {
 			>
 				<Board id="board" />
 				{overlays.map(
-					({isOpen, type, id, component: Component, height, width}) =>
+					({
+						isOpen,
+						type,
+						id,
+						component: Component,
+						height,
+						width,
+						background = true,
+					}) =>
 						isOpen && (
 							<Overlay
 								key={id}
@@ -50,6 +73,7 @@ export default function App() {
 								height={height}
 								width={width}
 								overlayType={type}
+								transparent={background}
 							>
 								<Component />
 							</Overlay>
