@@ -8,11 +8,13 @@ type OverlayProps = {
 	height?: number;
 	width?: number;
 	children: ReactNode;
+	transparent?: boolean;
 	overlayType: keyof typeof OVERLAY_TYPE;
 };
 const Overlay = ({
 	height = 50,
 	width = 50,
+	transparent = true,
 	overlayType,
 	children,
 }: OverlayProps) => {
@@ -22,8 +24,8 @@ const Overlay = ({
 	const {focus} = useFocusManager();
 	const {closeOverlay} = useFocus();
 
-	useInput((_, key) => {
-		if (key.escape) {
+	useInput((input, key) => {
+		if (key.escape || input === '?') {
 			focus('board');
 			closeOverlay(overlayType);
 		}
@@ -38,7 +40,7 @@ const Overlay = ({
 			height="100%"
 			alignItems="center"
 			justifyContent="center"
-			transparent={true}
+			transparent={transparent}
 		>
 			<Box
 				borderStyle="round"

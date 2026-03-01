@@ -10,7 +10,16 @@ import {useFocus} from '../../context/FocusContext.js';
 
 const Keybindings = () => {
 	const theme = useTheme();
-	const {nextColumn, prevColumn, nextCard, prevCard, expandCard, showQuitPrompt} = useFocus();
+	const {
+		nextColumn,
+		prevColumn,
+		nextCard,
+		prevCard,
+		expandCard,
+		showQuitPrompt,
+		openHelpMenu,
+	} = useFocus();
+
 	const {addStatement} = useDebug();
 	const app = useApp();
 	const {focus} = useFocusManager();
@@ -26,7 +35,7 @@ const Keybindings = () => {
 		else if (key.upArrow) trigger = 'upArrow';
 		else if (key.return) trigger = 'return';
 
-		const cmd = COMMANDS.find(c => c.input.includes(trigger));
+		const cmd = COMMANDS.find(c => c.keys.includes(trigger));
 		addStatement('Pressed', trigger);
 
 		if (cmd) {
@@ -56,6 +65,11 @@ const Keybindings = () => {
 
 					break;
 
+				case FOCUS_ACTION.KEYBINDINGS:
+					openHelpMenu();
+					focus('overlay');
+					break;
+
 				default:
 					break;
 			}
@@ -80,9 +94,9 @@ const Keybindings = () => {
 							return input;
 					}
 				};
-				let inputDisplay = Array.isArray(command.input)
-					? command.input.map(inputToIcon).join(',')
-					: inputToIcon(command.input);
+				let inputDisplay = Array.isArray(command.keys)
+					? command.keys.map(inputToIcon).join(',')
+					: inputToIcon(command.keys);
 				let title = `${inputDisplay}: ${command.title}`;
 				if (index + 1 !== displayedCommands.length) title = `${title} | `;
 				return (

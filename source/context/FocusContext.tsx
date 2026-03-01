@@ -37,6 +37,9 @@ type Action =
 	  }
 	| {
 			type: typeof FOCUS_ACTION.SHOW_QUIT_PROMPT;
+	  }
+	| {
+			type: typeof FOCUS_ACTION.OPEN_HELP_MENU;
 	  };
 
 export interface FocusState {
@@ -60,6 +63,7 @@ interface FocusContextValue {
 	expandCard: (cardId: Board) => void;
 	closeOverlay: (type: keyof typeof OVERLAY_TYPE) => void;
 	showQuitPrompt: () => void;
+	openHelpMenu: () => void;
 }
 
 const initialState: FocusState = {
@@ -150,6 +154,10 @@ const reducer = (state: FocusState, action: Action): FocusState => {
 			return {...state, quitPromptOpen: true};
 		}
 
+		case FOCUS_ACTION.OPEN_HELP_MENU: {
+			return {...state, helpMenuOpen: true};
+		}
+
 		default:
 			return state;
 	}
@@ -165,6 +173,7 @@ const FocusContext = createContext<FocusContextValue>({
 	expandCard: () => {},
 	closeOverlay: (_type: keyof typeof OVERLAY_TYPE) => {},
 	showQuitPrompt: () => {},
+	openHelpMenu: () => {},
 });
 
 export const FocusProvider = ({children}: {children: ReactNode}) => {
@@ -231,6 +240,11 @@ export const FocusProvider = ({children}: {children: ReactNode}) => {
 			type: FOCUS_ACTION.SHOW_QUIT_PROMPT,
 		});
 
+	const openHelpMenu = () =>
+		dispatch({
+			type: FOCUS_ACTION.OPEN_HELP_MENU,
+		});
+
 	return (
 		// @ts-ignore
 		<FocusContext.Provider
@@ -244,6 +258,7 @@ export const FocusProvider = ({children}: {children: ReactNode}) => {
 				expandCard,
 				closeOverlay,
 				showQuitPrompt,
+				openHelpMenu,
 			}}
 		>
 			{children}

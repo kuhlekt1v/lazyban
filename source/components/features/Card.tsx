@@ -3,16 +3,12 @@ import {Box} from '../shared/index.js';
 import {Card as ICard} from '../../core/models.js';
 import {useTheme} from '../../context/AppContext.js';
 import {LAYOUT} from '../../constants.js';
+import {displayText} from '../../utils/displayText.js';
 
 type CardProps = {
 	card: ICard;
 	isActive: boolean;
 };
-
-const displayText = (
-	text: string | null | undefined,
-	replacement: Element = <Text>&nbsp;</Text>,
-) => <Text>{text || replacement}</Text>;
 
 /**
  * Truncate text to fit within a specified character width per line and max number of lines.
