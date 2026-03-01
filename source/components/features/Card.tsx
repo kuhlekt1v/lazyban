@@ -117,7 +117,8 @@ const Card = ({card, isActive}: CardProps) => {
 			borderStyle="single"
 			borderColor={isActive ? theme.PRIMARY : theme.SECONDARY}
 			width="100%"
-			height={5}
+			height={LAYOUT.CARD_HEIGHT}
+			flexShrink={0}
 		>
 			<Text>{truncateText(`${card.id}: ${card.title}`, cardWidth, 1)}</Text>
 			<Text backgroundColor={theme.HIGHLIGHT} color="black">

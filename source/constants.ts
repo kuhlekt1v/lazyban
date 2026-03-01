@@ -6,6 +6,8 @@ export const LAYOUT = {
 	 * for top & bottom border line.
 	 */
 	CARD_HEIGHT: 7,
+	// Keep in sync with ResizeAwareBox default marginBottom to avoid overflow
+	RESERVED_BOTTOM_ROWS: 1,
 	HEADER_HEIGHT: 1,
 	FOOTER_HEIGHT: 2,
 	TOTAL_COLUMN: 4,

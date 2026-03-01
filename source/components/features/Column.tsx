@@ -16,10 +16,17 @@ const Column = ({columnId}: ColumnProps) => {
 	const {board} = useApp();
 	const {stdout} = useStdout();
 	const {focusState, cardsPerColumn} = useFocus();
-	const {HEADER_HEIGHT, FOOTER_HEIGHT, CARD_HEIGHT} = LAYOUT;
+	const {HEADER_HEIGHT, FOOTER_HEIGHT, CARD_HEIGHT, RESERVED_BOTTOM_ROWS} =
+		LAYOUT;
 
-	const [bodyHeight, setBodyHeight] = useState(
-		stdout.rows - HEADER_HEIGHT - FOOTER_HEIGHT,
+	const computeBodyHeight = (rows?: number) =>
+		Math.max(
+			0,
+			(rows ?? 0) - HEADER_HEIGHT - FOOTER_HEIGHT - RESERVED_BOTTOM_ROWS,
+		);
+
+	const [bodyHeight, setBodyHeight] = useState(() =>
+		computeBodyHeight(stdout?.rows),
 	);
 
 	const columnIndex = board.columns.findIndex(col => col.id === columnId);
@@ -28,7 +35,10 @@ const Column = ({columnId}: ColumnProps) => {
 	const cards = board.cards.filter(card => card.columnId === columnId);
 
 	const activeCardIndex = focusState.active.cardIndex;
-	const visibleCardsPerColumn = Math.floor(bodyHeight / CARD_HEIGHT);
+	const visibleCardsPerColumn = Math.max(
+		1,
+		Math.floor(bodyHeight / CARD_HEIGHT),
+	);
 	const startIndex = isFocused
 		? Math.floor(activeCardIndex! / visibleCardsPerColumn) *
 		  visibleCardsPerColumn
@@ -46,7 +56,7 @@ const Column = ({columnId}: ColumnProps) => {
 	 */
 	useEffect(() => {
 		const handleResize = () => {
-			setBodyHeight(stdout.rows - HEADER_HEIGHT - FOOTER_HEIGHT);
+			setBodyHeight(computeBodyHeight(stdout.rows));
 		};
 
 		stdout.on('resize', handleResize);
